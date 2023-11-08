@@ -318,7 +318,11 @@ public class Compilador extends javax.swing.JFrame {
         Grammar gramatica = new Grammar(tokens, errors);
         
         /* Eliminacion de errores */
-        
+        gramatica.delete("ERROR_X", 1, "----------> ERROR_X:  Error desconocido, verififque como esta escrito el codigo, Linea [#] Columna [%]");
+        gramatica.delete("ERROR_0", 1, "----------> ERROR_0:  El caracter no es valido en el lenguaje, Linea [#] Columna [%]");
+        gramatica.delete("ERROR_1", 1, "----------> ERROR_1:  El caracter punto no esta asociado a un numero real, Linea [#] Columna [%]");
+        gramatica.delete("ERROR_2", 1, "----------> ERROR_2:  El caracter comilla no esta asociado a una cadena, Linea [#] Columna [%]");
+        gramatica.delete("ERROR_3", 1, "----------> ERROR_3:  El caracter guion bajo no esta asociado a un puerto, Linea [#] Columna [%]");
         /* Agrupación de valores */
         gramatica.group("VALOR", "(INTEGER|DECIMAL|STRING|BOOLEAN)", true); // ALMACENAR EL VALOR
         gramatica.group("VALOR_CADENA", "Identificador_Cadena",true); // ALMACENAR UN STRING

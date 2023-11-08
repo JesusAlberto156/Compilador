@@ -1,17 +1,1 @@
-#Puertos
-port_1 proximity proximitySensor!
-port_2 motor motor1!
-port_3 LED_RGB rgbLED!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-port_5 joystick joystickIN!
-function int sumaNumerosInt(int a, int b){}
-function moverMotor(){}
+'''''

@@ -17,7 +17,8 @@ EspacioEnBlanco = {TerminadorDeLinea} | [ \t\f]
 ComentarioTradicional = "#*" [^*] ~"*/" | "/*" "*"+ "/" 
 FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 
-CaracterNoValido = [$¬@%&?¡¿!]
+CaracterNoValido = [$¬@%&?¡¿"|""/""*"]
+GuionBajo = [_]
 Simbolo = [ .,=()<>#{}+-;:&]
 Punto = [.]
 Coma = [,]
@@ -35,11 +36,17 @@ Identificador = {Letra}({Letra}|{Digito})*
 NumeroEntero = {Digito}({Digito})*
 
 /* Número Real */
-NumeroReal = {Digito}+\.({Digito})*
+NumeroReal = {Digito}+\.({Digito})({Digito})*
 
 IdentificadorVariable = {Letra}({Letra}|{Digito})*
 IdentificadorCadena = {Comilla}({Letra}|{Digito})({Letra}|{Digito}|{Simbolo})*{Comilla}
-Suma = {(Identificador+\+({Identificador})}
+
+/* Errores */
+
+Error0 = {CaracterNoValido}({CaracterNoValido})*
+Error1 = {Punto}({Punto})*
+Error2 = {Comilla}({Comilla})*
+Error3 = {GuionBajo}({GuionBajo})
 
 %%
 
@@ -149,7 +156,13 @@ case { return token(yytext(), "CASE_ESTRUCT", yyline, yycolumn); }
 "="  { return token(yytext(), "OP_ASIGNACION", yyline, yycolumn); }
 
 /* Signos de puntuación */
-"'" { return token(yytext(), "COMILLA", yyline, yycolumn); }
 "," { return token(yytext(), "COMA", yyline, yycolumn); }
 
-. { return token(yytext(), "ERROR", yyline, yycolumn); }
+/* Errores */
+
+{Error0} { return token(yytext(), "ERROR_0", yyline, yycolumn); }
+{Error1} { return token(yytext(), "ERROR_1", yyline, yycolumn); }
+{Error2} { return token(yytext(), "ERROR_2", yyline, yycolumn); }
+{Error3} { return token(yytext(), "ERROR_3", yyline, yycolumn); }
+
+. { return token(yytext(), "ERROR_X", yyline, yycolumn); }

@@ -17,7 +17,8 @@ EspacioEnBlanco = {TerminadorDeLinea} | [ \t\f]
 ComentarioTradicional = "#*" [^*] ~"*/" | "/*" "*"+ "/" 
 FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 
-CaracterNoValido = [$¬@%&?¡¿!]
+CaracterNoValido = [$¬@%&?¡¿"|""/""*"]
+GuionBajo = [_]
 Simbolo = [ .,=()<>#{}+-;:&]
 Punto = [.]
 Coma = [,]
@@ -39,6 +40,13 @@ NumeroReal = {Digito}+\.({Digito})*
 
 IdentificadorVariable = {Letra}({Letra}|{Digito})*
 IdentificadorCadena = {Comilla}({Letra}|{Digito})({Letra}|{Digito}|{Simbolo})*{Comilla}
+
+/* Errores */
+
+Error0 = {CaracterNoValido}({CaracterNoValido})*
+Error1 = {Punto}({Punto})*
+Error2 = {Comilla}({Comilla})*
+Error3 = {GuionBajo}({GuionBajo})
 
 %%
 
@@ -145,7 +153,11 @@ case { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
 "="  { return textColor(yychar, yylength(), new Color(249, 194, 60)); }
 
 /* Signos de puntuación */
-"'" { return textColor(yychar, yylength(), new Color(249, 194, 60)); }
 "," { return textColor(yychar, yylength(), new Color(249, 194, 60)); }
 
-. { /* Ignorar */ }
+{Error0} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error1} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error2} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error3} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+
+. { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
