@@ -101,10 +101,11 @@ return { return textColor(yychar, yylength(), new Color(20, 39, 111)); }
 print { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 true { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
 false { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
+console { return textColor(yychar, yylength(), new Color(0, 235, 255)); }
 
 /*Funciones Motor*/
 move { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
-stop { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
+restart { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
 start { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
 
 /*Metodos sensores */
@@ -140,8 +141,6 @@ case { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
 "-" { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
 "*" { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
 "/" { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
-"^" { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
-"%" { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
 
 /* Operadores de agrupación */
 "(" { return textColor(yychar, yylength(), new Color(20, 39, 111)); }

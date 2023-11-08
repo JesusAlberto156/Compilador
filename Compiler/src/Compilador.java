@@ -320,34 +320,61 @@ public class Compilador extends javax.swing.JFrame {
         /* Eliminacion de errores */
         gramatica.delete("ERROR_X", 1, "----------> ERROR_X:  Error desconocido, verififque como esta escrito el codigo, Linea [#] Columna [%]");
         gramatica.delete("ERROR_0", 1, "----------> ERROR_0:  El caracter no es valido en el lenguaje, Linea [#] Columna [%]");
-        gramatica.delete("ERROR_1", 1, "----------> ERROR_1:  El caracter punto no esta asociado a un numero real, Linea [#] Columna [%]");
-        gramatica.delete("ERROR_2", 1, "----------> ERROR_2:  El caracter comilla no esta asociado a una cadena, Linea [#] Columna [%]");
-        gramatica.delete("ERROR_3", 1, "----------> ERROR_3:  El caracter guion bajo no esta asociado a un puerto, Linea [#] Columna [%]");
+        gramatica.delete("ERROR_1", 1, "----------> ERROR_2:  El caracter comilla no esta asociado a una cadena, Linea [#] Columna [%]");
+        gramatica.delete("ERROR_2", 1, "----------> ERROR_3:  El caracter guion bajo no esta asociado a un puerto, Linea [#] Columna [%]");
+        
         /* Agrupación de valores */
-        gramatica.group("VALOR", "(INTEGER|DECIMAL|STRING|BOOLEAN)", true); // ALMACENAR EL VALOR
-        gramatica.group("VALOR_CADENA", "Identificador_Cadena",true); // ALMACENAR UN STRING
+        gramatica.group("VALOR_BOOLEANO", "(VERDADERO|FALSO)",true);
+        gramatica.group("VALOR_NUMERO_ENTERO", "(NUMERO)",true); 
+        gramatica.group("VALOR_NUMERO_REAL", "(NUMERO_REAL)",true); 
+        gramatica.group("VALOR_CADENA", "(CADENA)",true);
+        
+        gramatica.group("VALORES", "(VALOR_BOOLEANO | VALOR_NUMERO_ENTERO | VALOR_NUMERO_REAL | VALOR_CADENA)",true);
         
         
         /* Declaraciones de puertos */
-        gramatica.group("DECLARACION_PUERTO", "PUERTO TIPO_PUERTO IDENTIFICADOR END_INSTRUCTION", true, identProd);
+        gramatica.group("DECLARACIONES_PUERTO", "PUERTO TIPO_PUERTO IDENTIFICADOR END_INSTRUCTION", true, identProd);
         
-        /* Declaración de Variables */
-        gramatica.group("VARIABLES_CADENA", "VARIABLE TIPO_DATO IDENTIFICADOR OP_ASIGNACION VALOR_CADENA END_INSTRUCTION",true, identProd);
+        /* Declaraciones */
+        gramatica.group("DECLARACIONES_SIN_VALOR", "(VARIABLE|CONSTANTE) TIPO_DATO IDENTIFICADOR END_INSTRUCTION",true, identProd);
+        gramatica.group("DECLARACIONES_CON_VALOR", "(VARIABLE|CONSTANTE) TIPO_DATO IDENTIFICADOR OP_ASIGNACION VALORES END_INSTRUCTION",true, identProd);
                 
-        gramatica.group("DECLARACION_CONSTANTES", "CONSTANTE TIPO_DATO IDENTIFICADOR (OP_ASIGNACION (NUMERO|NUMERO_REAL))? END_INSTRUCTION",true, identProd);
+        /* Asignaciones de valor a las variables*/
+        gramatica.group("ASIGNACIONES", "IDENTIFICADOR OP_ASIGNACION VALORES END_INSTRUCTION",true, identProd);
         
-        gramatica.group("DECLARACION_VARIABLES", "VARIABLE TIPO_DATO IDENTIFICADOR (OP_ASIGNACION (NUMERO|NUMERO_REAL))? END_INSTRUCTION",true, identProd);
-        /* Definir variables con asignacion*/
-        gramatica.group("VARIABLES_ASIGNACION", "IDENTIFICADOR OP_ASIGNACION (NUMERO|NUMERO_REAL) END_INSTRUCTION",true, identProd);
+        /* Motores */
+        gramatica.group("MOTORES_CON_VALOR", "(MOVE_FM | RESTART_FM | START_FM) L_PARENT IDENTIFICADOR COMA VALORES R_PARENT END_INSTRUCTION",true, identProd);
+        gramatica.group("MOTORES_SIN_VALOR", "(MOVE_FM | RESTART_FM | START_FM) L_PARENT IDENTIFICADOR R_PARENT END_INSTRUCTION",true, identProd);
         
-        //gramatica.group("","",true,identProd);
-        /**/
-        gramatica.group("BLOQUE_BEGIN","BEGIN",true,identProd);
-        gramatica.group("BLOQUE_LOOP","LOOP",true,identProd);
-       
-       
-                /* Funciones*/
-        gramatica.group("FUNCIONES", "FUNCION_PR (TIPO_DATO)? IDENTIFICADOR L_PARENT (TIPO_DATO IDENTIFICADOR (COMA TIPO_DATO IDENTIFICADOR)*)? R_PARENT L_LLAVE R_LLAVE",true);
+        /* Impresora */
+        gramatica.group("IMPRESORA_A_CONSOLA", "PRINT_PR L_PARENT CONSOLA COMA (VALORES | IDENTIFICADOR) R_PARENT END_INSTRUCTION",true, identProd);
+        gramatica.group("IMPRESORA_A_LCD", "PRINT_PR L_PARENT IDENTIFICADOR COMA (VALORES | IDENTIFICADOR) R_PARENT END_INSTRUCTION",true, identProd);
+        
+        /* Palabras reservadas de los bloques de codigo*/
+        gramatica.group("BEGIN","BEGIN",true,identProd);
+        gramatica.group("LOOP","LOOP",true,identProd);
+        gramatica.group("FUNCION","FUNCION_PR",true,identProd);
+        
+        /* Operadores */
+        gramatica.group("OPERADORES","(SUMA|RESTA|MULTI|DIV)",true,identProd);
+        
+        /* Oprecaiones aritmeticas*/
+        gramatica.group("OPERACIONES", "IDENTIFICADOR OP_ASIGNACION IDENTIFICADOR OPERADORES IDENTIFICADOR END_INSTRUCTION",true);
+        
+        /* Bloques de codigo Funcion */
+        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",true);
+        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS", "FUNCION TIPO_DATO IDENTIFICADOR L_PARENT TIPO_DATO IDENTIFICADOR (COMA TIPO_DATO IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* RETURN_PR IDENTIFICADOR R_LLAVE",true);
+        
+        /* Llamada de funciones */
+        gramatica.group("LLAMADA_FUNCIONES_SIN_VALOR", "IDENTIFICADOR L_PARENT R_PARENT END_INSTRUCTION",true);
+        gramatica.group("LLAMADA_FUNCIONES_CON_VALOR", "IDENTIFICADOR L_PARENT VALORES (COMA VALORES)* R_PARENT END_INSTRUCTION",true);
+        
+        /* Bloques de codigo Begin */
+        gramatica.group("BLOQUE_BEGIN", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true);
+                
+        
+        /* Funciones*/
+        
         gramatica.group("LLAMANDO_FUNCION","IDENTIFICADOR L_PARENT R_PARENT END_INSTRUCTION",true);
         //gramatica.group("ESTRUCTURA_BASE_LOOP","(BLOQUE_LOOP) (L_LLAVE) (((DECLARACION_PUERTO|IDENTIFICADORES|VARIABLES_ASIGNACION)))(((DECLARACION_PUERTO|IDENTIFICADORES|VARIABLES_ASIGNACION))) (R_LLAVE)",true,identProd);
         gramatica.group("ESTRUCTURA_BASICA", "(((DECLARACION_PUERTO|VARIABLES_CADENA|DECLARACION_CONSTANTES|DECLARACION_VARIABLES|VARIABLES_ASIGNACION|FUNCIONES)))*");

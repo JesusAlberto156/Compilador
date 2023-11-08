@@ -17,9 +17,9 @@ EspacioEnBlanco = {TerminadorDeLinea} | [ \t\f]
 ComentarioTradicional = "#*" [^*] ~"*/" | "/*" "*"+ "/" 
 FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 
-CaracterNoValido = [$¬@%&?¡¿"|""/""*"]
+CaracterNoValido = [$¬@%&?¡;¿"|"]
 GuionBajo = [_]
-Simbolo = [ .,=()<>#{}+-;:&]
+Simbolo = [ .,=()<>#{}+-:&]
 Punto = [.]
 Coma = [,]
 Comilla = [']
@@ -38,15 +38,13 @@ NumeroEntero = {Digito}({Digito})*
 /* Número Real */
 NumeroReal = {Digito}+\.({Digito})({Digito})*
 
-IdentificadorVariable = {Letra}({Letra}|{Digito})*
 IdentificadorCadena = {Comilla}({Letra}|{Digito})({Letra}|{Digito}|{Simbolo})*{Comilla}
 
 /* Errores */
 
 Error0 = {CaracterNoValido}({CaracterNoValido})*
-Error1 = {Punto}({Punto})*
-Error2 = {Comilla}({Comilla})*
-Error3 = {GuionBajo}({GuionBajo})
+Error1 = {Comilla}({Comilla})*
+Error2 = {GuionBajo}({GuionBajo})
 
 %%
 
@@ -99,10 +97,11 @@ return { return token(yytext(), "RETURN_PR", yyline, yycolumn); }
 print { return token(yytext(), "PRINT_PR", yyline, yycolumn); }
 true { return token(yytext(), "VERDADERO", yyline, yycolumn); }
 false { return token(yytext(), "FALSO", yyline, yycolumn); }
+console { return token(yytext(), "CONSOLA", yyline, yycolumn); }
 
 /*Funciones Motor*/
 move { return token(yytext(), "MOVE_FM", yyline, yycolumn); }
-stop { return token(yytext(), "STOP_FM", yyline, yycolumn); }
+restart { return token(yytext(), "RESTART_FM", yyline, yycolumn); }
 start { return token(yytext(), "START_FM", yyline, yycolumn); }
 
 /*Metodos sensores */
@@ -127,8 +126,7 @@ break { return token(yytext(), "BREAK_PR", yyline, yycolumn); }
 case { return token(yytext(), "CASE_ESTRUCT", yyline, yycolumn); }
 
 {Identificador} { return token(yytext(), "IDENTIFICADOR", yyline, yycolumn);} 
-{IdentificadorVariable} { return token(yytext(), "Identificador_Variable", yyline, yycolumn); }
-{IdentificadorCadena} { return token(yytext(), "Identificador_Cadena", yyline, yycolumn); }
+{IdentificadorCadena} { return token(yytext(), "CADENA", yyline, yycolumn); }
 
 "!" { return token(yytext(), "END_INSTRUCTION", yyline, yycolumn); }
 
@@ -137,8 +135,6 @@ case { return token(yytext(), "CASE_ESTRUCT", yyline, yycolumn); }
 "-" { return token(yytext(), "RESTA", yyline, yycolumn); }
 "*" { return token(yytext(), "MULTI", yyline, yycolumn); }
 "/" { return token(yytext(), "DIV", yyline, yycolumn); }
-"^" { return token(yytext(), "ELEVAR", yyline, yycolumn); }
-"%" { return token(yytext(), "MOD", yyline, yycolumn); }
 
 /* Operadores relacionales */
 ">"|
@@ -157,12 +153,12 @@ case { return token(yytext(), "CASE_ESTRUCT", yyline, yycolumn); }
 
 /* Signos de puntuación */
 "," { return token(yytext(), "COMA", yyline, yycolumn); }
+{Punto} { return token(yytext(), "PUNTO", yyline, yycolumn); }
 
 /* Errores */
 
 {Error0} { return token(yytext(), "ERROR_0", yyline, yycolumn); }
 {Error1} { return token(yytext(), "ERROR_1", yyline, yycolumn); }
 {Error2} { return token(yytext(), "ERROR_2", yyline, yycolumn); }
-{Error3} { return token(yytext(), "ERROR_3", yyline, yycolumn); }
 
 . { return token(yytext(), "ERROR_X", yyline, yycolumn); }

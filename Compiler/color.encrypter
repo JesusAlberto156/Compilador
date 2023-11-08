@@ -1,1 +1,8 @@
-'''''
+function int Hola(int HA){
+	result = A * B!
+	return result
+}
+begin{
+	Hola(true)!
+	start(Hola)!
+}
