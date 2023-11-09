@@ -121,13 +121,7 @@ loop { return textColor(yychar, yylength(), new Color(165, 187, 232)); }
 
 /*Estructuras de control/repetitivas*/
 if { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
-else if { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
-switch { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
-do { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
-while { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
-repeat { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
-break { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
-case { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
+else { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
 
 
 {Identificador} { return textColor(yychar, yylength(), new Color(231, 119, 46)); } 

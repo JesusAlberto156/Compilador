@@ -117,13 +117,7 @@ loop { return token(yytext(), "LOOP", yyline, yycolumn); }
 
 /*Estructuras de control/repetitivas*/
 if { return token(yytext(), "IF_CONDICIONAL", yyline, yycolumn); }
-else if { return token(yytext(), "ELSE_IF_CONDICIONAL", yyline, yycolumn); }
-switch { return token(yytext(), "SWITCH_ESTRUCT", yyline, yycolumn); }
-do { return token(yytext(), "DO_ESTRUCT", yyline, yycolumn); } 
-while { return token(yytext(), "WHILE_ESTRUCT", yyline, yycolumn); }
-repeat { return token(yytext(), "FOR_ESTRUCT", yyline, yycolumn); } 
-break { return token(yytext(), "BREAK_PR", yyline, yycolumn); }
-case { return token(yytext(), "CASE_ESTRUCT", yyline, yycolumn); }
+else { return token(yytext(), "ELSE_CONDICIONAL", yyline, yycolumn); }
 
 {Identificador} { return token(yytext(), "IDENTIFICADOR", yyline, yycolumn);} 
 {IdentificadorCadena} { return token(yytext(), "CADENA", yyline, yycolumn); }

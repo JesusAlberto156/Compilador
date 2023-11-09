@@ -1,8 +1,71 @@
-function int Hola(int HA){
-	result = A * B!
-	return result
+#Puertos
+port_1 proximity proximitySensor!
+port_2 motor motor1!
+port_3 LED_RGB rgbLED!
+port_5 joystick joystickIN!
+port_6 button ButtonIN!
+port_7 temperature temperatureSensor!
+
+#Declaracion e iniacializacion de variables
+var int number1!
+var decimal number2!
+const string number3 !
+
+
+var string holaMundo = 'HolaMundo'!
+
+number1 = 3 !
+number2 = 3.3 !
+
+# Todas las variables se deben declarar fuera de los bloques o funciones
+# y antes de uso 
+# Declaracion de funciones
+
+#funcion suma simple
+var int result!
+
+function int sumaNumerosInt(int a, int b){
+   result = a + b!
+   return result!
 }
+
+#funcion mover motor1
+function moverMotor(){
+   move(motor1)!
+   print(console,'El motor1 se esta moviendo')!
+}
+
+#funcion detener motor1
+function detenerMotor(){
+   restart(motor1)!
+   print(console, 'El motor 1 se detuvo')!
+}
+
+#funcion escribir un numero en la pantalla LCD
+function escribirLCD(){
+   print(standarLCD, n)!
+}
+
 begin{
-	Hola(true)!
-	start(Hola)!
+   moverMotor()! # El motor se enciende y se mueve
+   detenerMotor()! # El motor se deteiene inmediatamente despues
+   escribirLCD(5)! # El standarLCD escribe en su pantalla el numero 5
 }
+
+var int d !
+
+#Al final del begin se debe declarar el bloque de proceso "loop"
+# este se llama automaticamente después del begin y se ejecuta en ciclo hasta
+# que se apague el dispositivo o se ponga la instrucion end
+loop{
+  if(number1>number2){ # Si numero 1 es mayor a numero 2 se mueve el motor
+    moverMotor()!
+  }else{ # Si numro 1 es mayor a numero 2 se mueve el motor
+    detenerMotor()!  
+  }
+  #number1 = read(temperatureSensor!)
+  number2 = 25.0 !
+  # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados
+}
+
+var int d !
