@@ -24,7 +24,7 @@ number2 = 3.3 !
 #funcion suma simple
 var int result!
 
-function int sumaNumerosInt(int a, int bm,){
+function int sumaNumerosInt(int a, int b){
    result = a + b!
    return result!
 }
@@ -63,6 +63,7 @@ loop{
   }else{ # Si numro 1 es mayor a numero 2 se mueve el motor
     detenerMotor()!  
   }
+  Distancia = puerto1.distance()!
   #number1 = read(temperatureSensor!)
   number2 = 25.0 !
   # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados

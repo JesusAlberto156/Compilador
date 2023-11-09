@@ -21,7 +21,6 @@ CaracterNoValido = [$¬@%&?¡;¿"|"]
 GuionBajo = [_]
 Simbolo = [ .,=()<>#{}+-:&]
 Punto = [.]
-Coma = [,]
 Comilla = [']
 
 /* Comentario */
@@ -51,90 +50,90 @@ Error2 = {GuionBajo}({GuionBajo})
 /* Comentarios o espacios en blanco */
 {Comentario}|{EspacioEnBlanco} { /*Ignorar*/ }
 
-{NumeroEntero} { return token(yytext(), "NUMERO", yyline, yycolumn); }
-{NumeroReal} { return token(yytext(), "NUMERO_REAL", yyline, yycolumn); }
+{NumeroEntero} { return token(yytext(), "VALOR_NUMERO_ENTERO", yyline, yycolumn); }
+{NumeroReal} { return token(yytext(), "VALOR_NUMERO_REAL", yyline, yycolumn); }
 
 /* Puertos */
-port_1|
-port_2|
-port_3|
-port_4|
-port_5|
-port_6|
-port_7|
-port_8|
-port_9 { return token(yytext(), "PUERTO", yyline, yycolumn); }
+port_1 { return token(yytext(), "PUERTO_1", yyline, yycolumn); }
+port_2 { return token(yytext(), "PUERTO_2", yyline, yycolumn); }
+port_3 { return token(yytext(), "PUERTO_3", yyline, yycolumn); }
+port_4 { return token(yytext(), "PUERTO_4", yyline, yycolumn); }
+port_5 { return token(yytext(), "PUERTO_5", yyline, yycolumn); }
+port_6 { return token(yytext(), "PUERTO_6", yyline, yycolumn); }
+port_7 { return token(yytext(), "PUERTO_7", yyline, yycolumn); }
+port_8 { return token(yytext(), "PUERTO_8", yyline, yycolumn); }
+port_9 { return token(yytext(), "PUERTO_9", yyline, yycolumn); }
 
 /* Tipos de puertos */
-proximity |
-temperature |
-LED |
-LED_RGB |
-LCD |
-speaker |
-joystick |
-button |
-motor { return token(yytext(), "TIPO_PUERTO", yyline, yycolumn); }
+proximity { return token(yytext(), "TIPO_PUERTO_PROXIMITY", yyline, yycolumn); }
+temperature { return token(yytext(), "TIPO_PUERTO_TEMPERATURE", yyline, yycolumn); }
+LED { return token(yytext(), "TIPO_PUERTO_LED", yyline, yycolumn); }
+LED_RGB { return token(yytext(), "TIPO_PUERTO_LED_RGB", yyline, yycolumn); }
+LCD { return token(yytext(), "TIPO_PUERTO_LCD", yyline, yycolumn); }
+speaker { return token(yytext(), "TIPO_PUERTO_SPEAKER", yyline, yycolumn); }
+joystick { return token(yytext(), "TIPO_PUERTO_JOYSTICK", yyline, yycolumn); }
+button { return token(yytext(), "TIPO_PUERTO_BUTTON", yyline, yycolumn); }
+motor { return token(yytext(), "TIPO_PUERTO_MOTOR", yyline, yycolumn); }
 
 /* Tipos de dato*/
-int|
-string|
-decimal|
-boolean { return token(yytext(), "TIPO_DATO", yyline, yycolumn); }
+int     { return token(yytext(), "TIPO_DATO_I", yyline, yycolumn); }
+string  { return token(yytext(), "TIPO_DATO_S", yyline, yycolumn); }
+decimal { return token(yytext(), "TIPO_DATO_D", yyline, yycolumn); }
+boolean { return token(yytext(), "TIPO_DATO_B", yyline, yycolumn); }
 
 /*Declaración de variables o constante */
-var { return token(yytext(), "VARIABLE", yyline, yycolumn);}
-const { return token(yytext(), "CONSTANTE", yyline, yycolumn);}
+var { return token(yytext(), "DECLARACION_V", yyline, yycolumn);}
+const { return token(yytext(), "DECLARACION_C", yyline, yycolumn);}
 
 /*Operadores logicos */
 and { return token(yytext(), "OP_LOGICO_AND", yyline, yycolumn);}
 or { return token(yytext(), "OP_LOGICO_OR", yyline, yycolumn); }
 not { return token(yytext(), "OP_LOGICO_NOT", yyline, yycolumn); }
 
-/*Palabras reservadas*/
-function { return token(yytext(), "FUNCION_PR", yyline, yycolumn); }
-return { return token(yytext(), "RETURN_PR", yyline, yycolumn); }
-print { return token(yytext(), "PRINT_PR", yyline, yycolumn); }
-true { return token(yytext(), "VERDADERO", yyline, yycolumn); }
-false { return token(yytext(), "FALSO", yyline, yycolumn); }
-console { return token(yytext(), "CONSOLA", yyline, yycolumn); }
+/*Palabras para metodos*/
+return { return token(yytext(), "METODO_R", yyline, yycolumn); }
+print { return token(yytext(), "METODO_P", yyline, yycolumn); }
+console { return token(yytext(), "METODO_C", yyline, yycolumn); }
+
+/*Palabras para el valor condicional*/
+true { return token(yytext(), "VALOR_CONDICIONAL_T", yyline, yycolumn); }
+false { return token(yytext(), "VALOR_CONDICIONAL_F", yyline, yycolumn); }
 
 /*Funciones Motor*/
-move { return token(yytext(), "MOVE_FM", yyline, yycolumn); }
-restart { return token(yytext(), "RESTART_FM", yyline, yycolumn); }
-start { return token(yytext(), "START_FM", yyline, yycolumn); }
+move { return token(yytext(), "MOTOR_M", yyline, yycolumn); }
+restart { return token(yytext(), "MOTOR_R", yyline, yycolumn); }
+start { return token(yytext(), "MOTOR_S", yyline, yycolumn); }
 
 /*Metodos sensores */
-distance |
-color |
-state |
-position |
-degree { return token(yytext(), "METODO_SENSOR", yyline, yycolumn); }
+distance { return token(yytext(), "METODO_SENSOR_DISTANCE", yyline, yycolumn); }
+color { return token(yytext(), "METODO_SENSOR_COLOR", yyline, yycolumn); }
+state { return token(yytext(), "METODO_SENSOR_STATE", yyline, yycolumn); }
+position { return token(yytext(), "METODO_SENSOR_POSITION", yyline, yycolumn); }
+degree { return token(yytext(), "METODO_SENSOR_DEGREE", yyline, yycolumn); }
 
-
-begin { return token(yytext(), "BEGIN", yyline, yycolumn); }
-loop { return token(yytext(), "LOOP", yyline, yycolumn); }
-
-/*Estructuras de control/repetitivas*/
-if { return token(yytext(), "IF_CONDICIONAL", yyline, yycolumn); }
-else { return token(yytext(), "ELSE_CONDICIONAL", yyline, yycolumn); }
+/*Estructuras de control*/
+function { return token(yytext(), "ESTRUCTURA_DE_CONTROL_F", yyline, yycolumn); }
+begin { return token(yytext(), "ESTRUCTURA_DE_CONTROL_B", yyline, yycolumn); }
+loop { return token(yytext(), "ESTRUCTURA_DE_CONTROL_L", yyline, yycolumn); }
+if { return token(yytext(), "ESTRUCTURA_DE_CONTROL_I", yyline, yycolumn); }
+else { return token(yytext(), "ESTRUCTURA_DE_CONTROL_E", yyline, yycolumn); }
 
 {Identificador} { return token(yytext(), "IDENTIFICADOR", yyline, yycolumn);} 
-{IdentificadorCadena} { return token(yytext(), "CADENA", yyline, yycolumn); }
+{IdentificadorCadena} { return token(yytext(), "VALOR_CADENA", yyline, yycolumn); }
 
-"!" { return token(yytext(), "END_INSTRUCTION", yyline, yycolumn); }
+"!" { return token(yytext(), "FIN_DE_LINEA", yyline, yycolumn); }
 
 /* Operadores aritméticos */
-"+" { return token(yytext(), "SUMA", yyline, yycolumn); }
-"-" { return token(yytext(), "RESTA", yyline, yycolumn); }
-"*" { return token(yytext(), "MULTI", yyline, yycolumn); }
-"/" { return token(yytext(), "DIV", yyline, yycolumn); }
+"+" { return token(yytext(), "OP_ARITMETICO_SUMA", yyline, yycolumn); }
+"-" { return token(yytext(), "OP_ARITMETICO_RESTA", yyline, yycolumn); }
+"*" { return token(yytext(), "OP_ARITMETICO_MULTI", yyline, yycolumn); }
+"/" { return token(yytext(), "OP_ARITMETICO_DIV", yyline, yycolumn); }
 
 /* Operadores relacionales */
-">"|
-"<"|
-">="|
-"<=" { return token(yytext(), "OP_RELACIONAL", yyline, yycolumn); }
+">"  { return token(yytext(), "OP_RELACIONAL_MAYOR_QUE", yyline, yycolumn); }
+"<"  { return token(yytext(), "OP_RELACIONAL_MENOR_QUE", yyline, yycolumn); }
+">=" { return token(yytext(), "OP_RELACIONAL_MAYOR_IGUAL_QUE", yyline, yycolumn); }
+"<=" { return token(yytext(), "OP_RELACIONAL_MENOR_IGUAL_QUE", yyline, yycolumn); }
 
 /* Signos de agrupación */
 "{" { return token(yytext(), "L_LLAVE", yyline, yycolumn); }
@@ -146,8 +145,8 @@ else { return token(yytext(), "ELSE_CONDICIONAL", yyline, yycolumn); }
 "="  { return token(yytext(), "OP_ASIGNACION", yyline, yycolumn); }
 
 /* Signos de puntuación */
-"," { return token(yytext(), "COMA", yyline, yycolumn); }
-{Punto} { return token(yytext(), "PUNTO", yyline, yycolumn); }
+"," { return token(yytext(), "SIGNO_PUNTUACION_COMA", yyline, yycolumn); }
+{Punto} { return token(yytext(), "SIGNO_PUNTUACION_PUNTO", yyline, yycolumn); }
 
 /* Errores */
 
