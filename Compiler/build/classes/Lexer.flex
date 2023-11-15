@@ -19,7 +19,7 @@ FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 
 CaracterNoValido = [$¬@%&?¡;¿"|"]
 GuionBajo = [_]
-Simbolo = [ .,=()<>#{}+-:&]
+Simbolo = [ .,=()<>#{}+-:&_]
 Punto = [.]
 Comilla = [']
 
@@ -43,7 +43,7 @@ IdentificadorCadena = {Comilla}({Letra}|{Digito})({Letra}|{Digito}|{Simbolo})*{C
 
 Error0 = {CaracterNoValido}({CaracterNoValido})*
 Error1 = {Comilla}({Comilla})*
-Error2 = {GuionBajo}({GuionBajo})
+Error2 = {GuionBajo}({GuionBajo})*
 
 %%
 
@@ -70,8 +70,6 @@ temperature { return token(yytext(), "TIPO_PUERTO_TEMPERATURE", yyline, yycolumn
 LED { return token(yytext(), "TIPO_PUERTO_LED", yyline, yycolumn); }
 LED_RGB { return token(yytext(), "TIPO_PUERTO_LED_RGB", yyline, yycolumn); }
 LCD { return token(yytext(), "TIPO_PUERTO_LCD", yyline, yycolumn); }
-speaker { return token(yytext(), "TIPO_PUERTO_SPEAKER", yyline, yycolumn); }
-joystick { return token(yytext(), "TIPO_PUERTO_JOYSTICK", yyline, yycolumn); }
 button { return token(yytext(), "TIPO_PUERTO_BUTTON", yyline, yycolumn); }
 motor { return token(yytext(), "TIPO_PUERTO_MOTOR", yyline, yycolumn); }
 
@@ -106,9 +104,9 @@ start { return token(yytext(), "MOTOR_S", yyline, yycolumn); }
 
 /*Metodos sensores */
 distance { return token(yytext(), "METODO_SENSOR_DISTANCE", yyline, yycolumn); }
-color { return token(yytext(), "METODO_SENSOR_COLOR", yyline, yycolumn); }
 state { return token(yytext(), "METODO_SENSOR_STATE", yyline, yycolumn); }
-position { return token(yytext(), "METODO_SENSOR_POSITION", yyline, yycolumn); }
+time { return token(yytext(), "METODO_SENSOR_TIME", yyline, yycolumn); }
+delay { return token(yytext(), "METODO_SENSOR_DELAY", yyline, yycolumn); }
 degree { return token(yytext(), "METODO_SENSOR_DEGREE", yyline, yycolumn); }
 
 /*Estructuras de control*/

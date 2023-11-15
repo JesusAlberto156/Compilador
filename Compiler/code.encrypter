@@ -2,17 +2,15 @@
 port_1 proximity proximitySensor!
 port_2 motor motor1!
 port_3 LED_RGB rgbLED!
-port_5 joystick joystickIN!
 port_6 button ButtonIN!
 port_7 temperature temperatureSensor!
 
 #Declaracion e iniacializacion de variables
 var int number1!
 var decimal number2!
-const string number3 !
+const string number3!
 
-
-var string holaMundo = 'HolaMundo'!
+var string Hola = 'HolaMundo'!
 
 number1 = 3 !
 number2 = 3.3 !
@@ -31,7 +29,7 @@ function int sumaNumerosInt(int a, int b){
 
 #funcion mover motor1
 function moverMotor(){
-   move(motor1)!
+   move(Hola)!
    print(console,'El motor1 se esta moviendo')!
 }
 
@@ -63,10 +61,9 @@ loop{
   }else{ # Si numro 1 es mayor a numero 2 se mueve el motor
     detenerMotor()!  
   }
+  delay(100)!
   Distancia = puerto1.distance()!
   #number1 = read(temperatureSensor!)
   number2 = 25.0 !
   # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados
 }
-
-var int d !
