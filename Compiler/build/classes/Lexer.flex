@@ -17,7 +17,7 @@ EspacioEnBlanco = {TerminadorDeLinea} | [ \t\f]
 ComentarioTradicional = "#*" [^*] ~"*/" | "/*" "*"+ "/" 
 FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 
-CaracterNoValido = [$¬@%&?¡;¿"|"]
+CaracterNoValido = [$¬@%?¡;¿"|"]
 GuionBajo = [_]
 Simbolo = [ .,=()<>#{}+-:&_]
 Punto = [.]
@@ -92,6 +92,9 @@ not { return token(yytext(), "OP_LOGICO_NOT", yyline, yycolumn); }
 return { return token(yytext(), "METODO_R", yyline, yycolumn); }
 print { return token(yytext(), "METODO_P", yyline, yycolumn); }
 console { return token(yytext(), "METODO_C", yyline, yycolumn); }
+delay { return token(yytext(), "METODO_D", yyline, yycolumn); }
+operation { return token(yytext(), "METODO_O", yyline, yycolumn); }
+call { return token(yytext(), "METODO_CALL", yyline, yycolumn); }
 
 /*Palabras para el valor condicional*/
 true { return token(yytext(), "VALOR_CONDICIONAL_T", yyline, yycolumn); }
@@ -106,7 +109,6 @@ start { return token(yytext(), "MOTOR_S", yyline, yycolumn); }
 distance { return token(yytext(), "METODO_SENSOR_DISTANCE", yyline, yycolumn); }
 state { return token(yytext(), "METODO_SENSOR_STATE", yyline, yycolumn); }
 time { return token(yytext(), "METODO_SENSOR_TIME", yyline, yycolumn); }
-delay { return token(yytext(), "METODO_SENSOR_DELAY", yyline, yycolumn); }
 degree { return token(yytext(), "METODO_SENSOR_DEGREE", yyline, yycolumn); }
 
 /*Estructuras de control*/

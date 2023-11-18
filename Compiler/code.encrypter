@@ -22,14 +22,15 @@ number2 = 3.3 !
 #funcion suma simple
 var int result!
 
-function int sumaNumerosInt(int a, int b){
-   result = a + b!
+function int sumaNumerosInt(int B,int a){
+   operation result = a + b!
    return result!
 }
 
 #funcion mover motor1
 function moverMotor(){
    move(Hola)!
+   operation result = a + b!
    print(console,'El motor1 se esta moviendo')!
 }
 
@@ -44,10 +45,12 @@ function escribirLCD(){
    print(standarLCD, n)!
 }
 
+   operation h = a + b!
 begin{
-   moverMotor()! # El motor se enciende y se mueve
-   detenerMotor()! # El motor se deteiene inmediatamente despues
-   escribirLCD(5)! # El standarLCD escribe en su pantalla el numero 5
+   operation h = a + b!
+   call moverMotor()! # El motor se enciende y se mueve
+   call detenerMotor()! # El motor se deteiene inmediatamente despues
+   call escribirLCD(5)! # El standarLCD escribe en su pantalla el numero 5
 }
 
 var int d !
@@ -57,12 +60,12 @@ var int d !
 # que se apague el dispositivo o se ponga la instrucion end
 loop{
   if(number1>number2){ # Si numero 1 es mayor a numero 2 se mueve el motor
-    moverMotor()!
+    call moverMotor()!
   }else{ # Si numro 1 es mayor a numero 2 se mueve el motor
-    detenerMotor()!  
+    call detenerMotor()!  
   }
   delay(100)!
-  Distancia = puerto1.distance()!
+  call Distancia = puerto1.distance()!
   #number1 = read(temperatureSensor!)
   number2 = 25.0 !
   # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados

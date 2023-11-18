@@ -17,7 +17,7 @@ EspacioEnBlanco = {TerminadorDeLinea} | [ \t\f]
 ComentarioTradicional = "#*" [^*] ~"*/" | "/*" "*"+ "/" 
 FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 
-CaracterNoValido = [$¬@%&?¡¿"|""/""*"]
+CaracterNoValido = [$¬@%?¡¿"|""/""*"]
 GuionBajo = [_]
 Simbolo = [ .,=()<>#{}+-;:&]
 Punto = [.]
@@ -99,6 +99,9 @@ print { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 true { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
 false { return textColor(yychar, yylength(), new Color(178, 127, 232)); }
 console { return textColor(yychar, yylength(), new Color(0, 235, 255)); }
+delay { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
+operation { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
+call { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 
 /*Funciones Motor*/
 move { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
@@ -109,7 +112,6 @@ start { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
 distance |
 time |
 state |
-delay |
 degree { return textColor(yychar, yylength(), new Color(210, 106, 193)); }
 
 
@@ -149,5 +151,7 @@ else { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
 {Error0} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
 {Error1} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
 {Error2} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+
+"&" { return textColor(yychar, yylength(), new Color(0, 0, 0)); }
 
 . { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
