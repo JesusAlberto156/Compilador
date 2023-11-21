@@ -45,8 +45,32 @@ public class Compilador extends javax.swing.JFrame {
     private ArrayList<ErrorLSSL> errors;
     private ArrayList<TextColor> textsColor;
     private Timer timerKeyReleased;
-    private ArrayList<Production> identProd;
-    private HashMap<String, String> identificadores;
+    private ArrayList<Production> identProdDP;
+    private ArrayList<Production> identProdDCV;
+    private ArrayList<Production> identProdDSV;
+    private ArrayList<Production> identProdA;
+    private ArrayList<Production> identProdFMCV;
+    private ArrayList<Production> identProdFMSV;
+    private ArrayList<Production> identProdMIC;
+    private ArrayList<Production> identProdMIL;
+    private ArrayList<Production> identProdO;
+    private ArrayList<Production> identProdFCP;
+    private ArrayList<Production> identProdFSP;
+    private ArrayList<Production> identProdLFSP;
+    private ArrayList<Production> identProdLFCP;
+    private ArrayList<Production> identProdB;
+    private ArrayList<Production> identProdMS;
+    private ArrayList<Production> identProdMD;
+    private ArrayList<Production> identProdIR;
+    private ArrayList<Production> identProdIL1V;
+    private ArrayList<Production> identProdIL2V;
+    private ArrayList<Production> identProdER;
+    private ArrayList<Production> identProdEL1V;
+    private ArrayList<Production> identProdEL2V;
+    private ArrayList<Production> identProdL;
+    private HashMap<String, String> identificadoresC;
+    private HashMap<String, String> identificadoresV;
+    private HashMap<String, String> identificadoresT;
     private boolean codeHasBeenCompiled = false;
     /**
      * Creates new form Compilador
@@ -83,8 +107,32 @@ public class Compilador extends javax.swing.JFrame {
         tokens = new ArrayList<>();
         errors = new ArrayList<>();
         textsColor = new ArrayList<>();
-        identProd = new ArrayList<>();
-        identificadores = new HashMap<>();
+        identProdDP = new ArrayList<>();
+        identProdDCV = new ArrayList<>();
+        identProdDSV = new ArrayList<>();
+        identProdA = new ArrayList<>();
+        identProdFMCV = new ArrayList<>();
+        identProdFMSV = new ArrayList<>();
+        identProdMIC = new ArrayList<>();
+        identProdMIL = new ArrayList<>();
+        identProdO = new ArrayList<>();
+        identProdFCP = new ArrayList<>();
+        identProdFSP = new ArrayList<>();
+        identProdLFSP = new ArrayList<>();
+        identProdLFCP = new ArrayList<>();
+        identProdB = new ArrayList<>();
+        identProdMS = new ArrayList<>();
+        identProdMD = new ArrayList<>();
+        identProdIR = new ArrayList<>();
+        identProdIL1V = new ArrayList<>();
+        identProdIL2V = new ArrayList<>();
+        identProdER = new ArrayList<>();
+        identProdEL1V = new ArrayList<>();
+        identProdEL2V = new ArrayList<>();
+        identProdL = new ArrayList<>();
+        identificadoresC = new HashMap<>();
+        identificadoresV = new HashMap<>();
+        identificadoresT = new HashMap<>();
         Functions.setAutocompleterJTextComponent(new String[]
             {"port_1 'TIPO PUERTO' 'IDENTIFICADOR'!","port_3 'TIPO PUERTO' 'IDENTIFICADOR'!",
              "port_3 'TIPO PUERTO' 'IDENTIFICADOR'!","port_4 'TIPO PUERTO' 'IDENTIFICADOR'!",
@@ -176,15 +224,20 @@ public class Compilador extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem15 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
         jMenuItem12 = new javax.swing.JMenuItem();
         jMenuItem14 = new javax.swing.JMenuItem();
+        jMenuItem16 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
+        jMenuItem17 = new javax.swing.JMenuItem();
+        jMenuItem18 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -432,6 +485,12 @@ public class Compilador extends javax.swing.JFrame {
         });
         jMenu2.add(jMenuItem9);
 
+        jMenuItem11.setText("Tipos de datos");
+        jMenu2.add(jMenuItem11);
+
+        jMenuItem15.setText("Estructuras con sentido");
+        jMenu2.add(jMenuItem15);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Documentación");
@@ -455,6 +514,9 @@ public class Compilador extends javax.swing.JFrame {
         jMenuItem14.setText("Sintáctico");
         jMenu8.add(jMenuItem14);
 
+        jMenuItem16.setText("Semántico");
+        jMenu8.add(jMenuItem16);
+
         jMenu5.add(jMenu8);
 
         jMenuBar1.add(jMenu5);
@@ -471,6 +533,12 @@ public class Compilador extends javax.swing.JFrame {
             }
         });
         jMenu6.add(jMenuItem10);
+
+        jMenuItem17.setText("Estructuras");
+        jMenu6.add(jMenuItem17);
+
+        jMenuItem18.setText("Estructuras con sentido");
+        jMenu6.add(jMenuItem18);
 
         jMenuItem13.setText("Errores");
         jMenuItem13.addActionListener(new java.awt.event.ActionListener() {
@@ -681,7 +749,7 @@ public class Compilador extends javax.swing.JFrame {
         clearFields();
         lexicalAnalysis();
         fillTableTokens();
-        syntacticAnalysis(identProd);
+        syntacticAnalysis();
         semanticAnalysis();
         printConsole();
         codeHasBeenCompiled = true;
@@ -711,7 +779,7 @@ public class Compilador extends javax.swing.JFrame {
         }
     }
 
-    private void syntacticAnalysis(ArrayList<Production> identProd)  {
+    private void syntacticAnalysis()  {
         Grammar gramatica = new Grammar(tokens, errors);
         
         
@@ -738,7 +806,7 @@ public class Compilador extends javax.swing.JFrame {
         gramatica.group("SENSORES", "(METODO_SENSOR_DISTANCE | METODO_SENSOR_TIME | METODO_SENSOR_STATE | METODO_SENSOR_DEGREE)");
         
         /* Declaraciones de puertos */
-        gramatica.group("DECLARACIONES_PUERTO", "PUERTOS TIPO_PUERTOS IDENTIFICADOR FIN_DE_LINEA",true);
+        gramatica.group("DECLARACIONES_PUERTO", "PUERTOS TIPO_PUERTOS IDENTIFICADOR FIN_DE_LINEA",true,identProdDP);
         
         /*ERRORES DE LA DECLARACION DE PUERTO*/
         gramatica.group("DECLARACIONES_PUERTO_E", " TIPO_PUERTOS IDENTIFICADOR FIN_DE_LINEA",3,
@@ -767,8 +835,8 @@ public class Compilador extends javax.swing.JFrame {
         /*ELIMINACION DE ERRORES*/
         
         /* Declaraciones */
-        gramatica.group("DECLARACIONES_CON_VALOR", "DECLARACIONES TIPO_DATOS IDENTIFICADOR OP_ASIGNACION VALORES FIN_DE_LINEA",true);
-        gramatica.group("DECLARACIONES_SIN_VALOR", "DECLARACIONES TIPO_DATOS IDENTIFICADOR FIN_DE_LINEA",true);
+        gramatica.group("DECLARACIONES_CON_VALOR", "DECLARACIONES TIPO_DATOS IDENTIFICADOR OP_ASIGNACION VALORES FIN_DE_LINEA",true,identProdDCV);
+        gramatica.group("DECLARACIONES_SIN_VALOR", "DECLARACIONES TIPO_DATOS IDENTIFICADOR FIN_DE_LINEA",true,identProdDSV);
         
         /*ERRORES DE LA DECLARACION CON VALOR*/
         gramatica.group("DECLARACIONES_CON_VALOR_E", "TIPO_DATOS IDENTIFICADOR OP_ASIGNACION VALORES FIN_DE_LINEA",3,
@@ -863,11 +931,11 @@ public class Compilador extends javax.swing.JFrame {
         /*ELIMINACION DE ERRORES*/
         
         /* Asignaciones de valor a las variables*/
-        gramatica.group("ASIGNACIONES", "IDENTIFICADOR OP_ASIGNACION VALORES FIN_DE_LINEA",true);
+        gramatica.group("ASIGNACIONES", "IDENTIFICADOR OP_ASIGNACION VALORES FIN_DE_LINEA",true,identProdA);
         
         /* Motores */
-        gramatica.group("MOTORES_CON_VALOR", "MOTORES L_PARENT IDENTIFICADOR SIGNO_PUNTUACION_COMA VALORES R_PARENT FIN_DE_LINEA",true);
-        gramatica.group("MOTORES_SIN_VALOR", "MOTORES L_PARENT IDENTIFICADOR R_PARENT FIN_DE_LINEA",true);
+        gramatica.group("MOTORES_CON_VALOR", "MOTORES L_PARENT IDENTIFICADOR SIGNO_PUNTUACION_COMA VALORES R_PARENT FIN_DE_LINEA",true,identProdFMCV);
+        gramatica.group("MOTORES_SIN_VALOR", "MOTORES L_PARENT IDENTIFICADOR R_PARENT FIN_DE_LINEA",true,identProdFMSV);
         
         /*ERRORES DE LA FUNCIONES DE MOTORES CON VALOR*/
         gramatica.group("MOTORES_CON_VALOR_E", "L_PARENT IDENTIFICADOR SIGNO_PUNTUACION_COMA VALORES R_PARENT FIN_DE_LINEA",17,
@@ -1050,8 +1118,8 @@ public class Compilador extends javax.swing.JFrame {
         /*ELIMINACION DE ERRORES*/
         
         /* Impresora */
-        gramatica.group("IMPRESORA_A_CONSOLA", "METODO_P L_PARENT METODO_C SIGNO_PUNTUACION_COMA (VALORES | IDENTIFICADOR) R_PARENT FIN_DE_LINEA");
-        gramatica.group("IMPRESORA_A_LCD", "METODO_P L_PARENT IDENTIFICADOR SIGNO_PUNTUACION_COMA (VALORES | IDENTIFICADOR) R_PARENT FIN_DE_LINEA");
+        gramatica.group("IMPRESORA_A_CONSOLA", "METODO_P L_PARENT METODO_C SIGNO_PUNTUACION_COMA (VALORES | IDENTIFICADOR) R_PARENT FIN_DE_LINEA",true,identProdMIC);
+        gramatica.group("IMPRESORA_A_LCD", "METODO_P L_PARENT IDENTIFICADOR SIGNO_PUNTUACION_COMA (VALORES | IDENTIFICADOR) R_PARENT FIN_DE_LINEA",true,identProdMIL);
         
         /*ERRORES DEL METODO DE LA IMPRESORA A CONSOLA*/
         gramatica.group("IMPRESORA_A_CONSOLA_E", "L_PARENT METODO_C SIGNO_PUNTUACION_COMA (VALORES | IDENTIFICADOR) R_PARENT FIN_DE_LINEA",25,
@@ -1301,20 +1369,13 @@ public class Compilador extends javax.swing.JFrame {
         gramatica.delete("IMPRESORA_A_LCD_E");
         /*ELIMINACION DE ERRORES*/
         
-        /* Palabras reservadas de las estructas de control */
-        gramatica.group("BEGIN","ESTRUCTURA_DE_CONTROL_B");
-        gramatica.group("LOOP","ESTRUCTURA_DE_CONTROL_L");
-        gramatica.group("FUNCION","ESTRUCTURA_DE_CONTROL_F");
-        gramatica.group("IF","ESTRUCTURA_DE_CONTROL_I");
-        gramatica.group("ELSE","ESTRUCTURA_DE_CONTROL_E");
-        
         /* Operadores */
         gramatica.group("OPERADORES_ARITMETICOS","(OP_ARITMETICO_SUMA | OP_ARITMETICO_RESTA | OP_ARITMETICO_MULTI | OP_ARITMETICO_DIV)");
         gramatica.group("OPERADORES_LOGICOS","(OP_LOGICO_AND | OP_LOGICO_OR | OP_LOGICO_NOT)");
         gramatica.group("OPERADORES_RELACIONALES","(OP_RELACIONAL_MENOR_QUE | OP_RELACIONAL_MAYOR_QUE | OP_RELACIONAL_MAYOR_IGUAL_QUE | OP_RELACIONAL_MENOR_IGUAL_QUE)");
         
         /* Oprecaiones aritmeticas*/
-        gramatica.group("OPERACIONES", "METODO_O IDENTIFICADOR OP_ASIGNACION (IDENTIFICADOR|VALORES) OPERADORES_ARITMETICOS (IDENTIFICADOR|VALORES) FIN_DE_LINEA");
+        gramatica.group("OPERACIONES", "METODO_O IDENTIFICADOR OP_ASIGNACION (IDENTIFICADOR|VALORES) OPERADORES_ARITMETICOS (IDENTIFICADOR|VALORES) FIN_DE_LINEA",true,identProdO);
         
         /*ERRORES DE OPERACIONES*/
         gramatica.group("OPERACIONES_E", "IDENTIFICADOR OP_ASIGNACION (IDENTIFICADOR|VALORES) OPERADORES_ARITMETICOS (IDENTIFICADOR|VALORES) FIN_DE_LINEA",33,
@@ -1456,4662 +1517,12 @@ public class Compilador extends javax.swing.JFrame {
         gramatica.delete("OPERACIONES_E");
         /*ELIMINACION DE ERRORES*/
         
-        /* Estructura Funcion */
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",true);
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",true);
-        
-        /*ERROR DE ESTRUCTURA*/
-        gramatica.group("OPERACION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (OPERACIONES | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",109,
-                "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("MOTOR_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",110,
-                "----------> Error_110:  La función del motor no está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IMPRESORA_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",111,
-                "----------> Error_111:  El método impresora no está dentro de un bloque de función, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("DECLARACION_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",116,
-                "----------> Error_116:  La declaración está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
-        gramatica.group("DECLARACION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR)* R_LLAVE",116,
-                "----------> Error_116:  La declaración está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACION_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES| ASIGNACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",117,
-                "----------> Error_117:  La asignación está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES)* R_LLAVE",117,
-                "----------> Error_117:  La asignación está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | DECLARACIONES_PUERTO)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        
-        gramatica.delete("OPERACION_ESTRUCTURA_E");
-        gramatica.delete("MOTOR_ESTRUCTURA_E");
-        gramatica.delete("IMPRESORA_ESTRUCTURA_E");
-        gramatica.delete("DECLARACION_ESTRUCTURA_E");
-        gramatica.delete("ASIGNACION_ESTRUCTURA_E");
-        gramatica.delete("FUNCION_ESTRUCTURA_E");
-        gramatica.delete("PUERTO_ESTRUCTURA_E");
-        /*ERROR DE ESTRUCTURA*/
-        /*ERRORES DE LAS FUNCIONES CON PARAMETROS*/
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",43,
-                "----------> Error_43:  Falta la palabra reservada en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",44,
-                "----------> Error_44:  Falta el tipo de dato de retorno en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",45,
-                "----------> Error_45:  Falta el identificador en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",46,
-                "----------> Error_46:  Falta el ( o )  o ambos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",46,
-                "----------> Error_46:  Falta el ( o )  o ambos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",46,
-                "----------> Error_46:  Falta el ( o )  o ambos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",47,
-                "----------> Error_47:  Falta el tipo de dato en el o los parámetros en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",48,
-                "----------> Error_48:  Falta el identificador en el o los parámetros en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS | SIGNO_PUNTUACION_COMA IDENTIFICADOR | SIGNO_PUNTUACION_COMA)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",49,
-                "----------> Error_49:  Falta el tipo de dato o el identificador o ambos en los parámetros en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS | SIGNO_PUNTUACION_COMA IDENTIFICADOR | SIGNO_PUNTUACION_COMA | SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",49,
-                "----------> Error_49:  Falta el tipo de dato o el identificador o ambos en los parámetros en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR | SIGNO_PUNTUACION_COMA TIPO_DATOS | SIGNO_PUNTUACION_COMA | SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",49,
-                "----------> Error_49:  Falta el tipo de dato o el identificador o ambos en los parámetros en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT SIGNO_PUNTUACION_COMA "
-                + "      (SIGNO_PUNTUACION_COMA | TIPO_DATOS | IDENTIFICADOR | TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",49,
-                "----------> Error_49:  Falta el tipo de dato o el identificador o ambos en los parámetros en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR"
-                + "      (TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",50,
-                "----------> Error_50:  Falta la , en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA"
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",51,
-                "----------> Error_51:  Falta la { o } o ambas en al función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",51,
-                "----------> Error_51:  Falta la { o } o ambas en al función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",51,
-                "----------> Error_51:  Falta la { o } o ambas en al función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",52,
-                "----------> Error_52:  Falta la palabra reservada return en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",53,
-                "----------> Error_53:  Falta el identificador de retorno en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",54,
-                "----------> Error_54:  Falta el ! En la función, Linea [#] Columna [%]");
-        /*DOS ELEMENTOS*/
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        /*DOS ELEMENTOS*/
-        /*TRES ELEMENTOS*/
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");   
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");   
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");    
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR  R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        /*TRES ELEMENTOS*/
-        /*CUATRO ELEMENTOS*/
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION  L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENTm (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)*  IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)*L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADORR_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT(OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR  (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR  (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR  TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]"); 
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)*IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR ( "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      )* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");       
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");      
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]"); 
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* IDENTIFICADOR FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* (OPERACIONES)* METODO_R IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* L_LLAVE (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* FIN_DE_LINEA",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* IDENTIFICADOR",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT (OPERACIONES)* METODO_R",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]"); 
-        /*CUATRO ELEMENTOS*/
-        /*CINCO ELEMENTOS*
-        
-        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA "
-                + "      TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        /*CINCO ELEMENTOS*/
-        /*SEIS ELEMENTOS*/
-        
-        /*SEIS ELEMENTOS*/
-        /*SIETE ELEMENTOS*/
-        
-        /*SIETE ELEMENTOS*/
-        /*OCHO ELEMENTOS*/
-        
-        /*OCHO ELEMENTOS*/
-        /*NUEVE ELEMENTOS*/
-        
-        /*NUEVE ELEMENTOS*/
-        /*DIEZ ELEMENTOS*/
-        
-        /*DIEZ ELEMENTOS*/
-        /*ONCE ELEMENTOS*/
-        
-        /*ONCE ELEMENTOS*/
-        /*DOCE ELEMENTOS*/
-        
-        /*DOCE ELEMENTOS*/
-        /*TRECE ELEMENTOS*/
-        
-        /*TRECE ELEMENTOS*/
-        /*ERRORES DE LAS FUNCIONES CON PARAMETROS*/
-        /*ERRORES DE LAS FUNCIONES SIN PARAMETROS*/
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",43,
-                "----------> Error_43:  Falta la palabra reservada en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",45,
-                "----------> Error_45:  Falta el identificador en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",46,
-                "----------> Error_46:  Falta el ( o )  o ambos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",46,
-                "----------> Error_46:  Falta el ( o )  o ambos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",46,
-                "----------> Error_46:  Falta el ( o )  o ambos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",51,
-                "----------> Error_51:  Falta la { o } o ambas en al función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",51,
-                "----------> Error_51:  Falta la { o } o ambas en al función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",51,
-                "----------> Error_51:  Falta la { o } o ambas en al función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR L_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION R_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION L_PARENT (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION IDENTIFICADOR (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)*",55,
-                "----------> Error_55:  Faltan dos o más elementos en la función, Linea [#] Columna [%]");
-        
-        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS_E", "FUNCION",56,
-                "----------> Error_56:  La palabra reservada no está en la función, Linea [#] Columna [%]");
-        /*ERRORES DE LAS FUNCIONES SIN PARAMETROS*/
-        /*ELIMINACION DE ERRORES*/
-        gramatica.delete("BLOQUE_FUNCION_CON_PARAMETROS_E");
-        gramatica.delete("BLOQUE_FUNCION_SIN_PARAMETROS_E");
-        /*ELIMINACION DE ERRORES*/
-        
         /* Llamada de funciones */
-        gramatica.group("LLAMADA_FUNCIONES_CON_VALOR", "METODO_CALL IDENTIFICADOR L_PARENT VALORES (SIGNO_PUNTUACION_COMA VALORES)* R_PARENT FIN_DE_LINEA");
-        gramatica.group("LLAMADA_FUNCIONES_SIN_VALOR", "METODO_CALL IDENTIFICADOR L_PARENT R_PARENT FIN_DE_LINEA");
-        
-        /*ERROR DE ESTRUCTURA*/
-        gramatica.group("LLAMADA_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",112,
-                "----------> Error_112:  La llamada de la función no está dentro del bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("LLAMADA_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",112,
-                "----------> Error_112:  La llamada de la función no está dentro del bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("DELAY_ESTRUCTURA_E", "METODO_DELAY",114,
-                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("DELAY_ESTRUCTURA_E", "METODO_DELAY",114,
-                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        
-        gramatica.delete("LLAMADA_ESTRUCTURA_E");
-        /*ERROR DE ESTRUCTURA*/
+        gramatica.group("LLAMADA_FUNCIONES_CON_VALOR", "METODO_CALL IDENTIFICADOR L_PARENT VALORES (SIGNO_PUNTUACION_COMA VALORES)* R_PARENT FIN_DE_LINEA",true,identProdLFCP);
+        gramatica.group("LLAMADA_FUNCIONES_SIN_VALOR", "METODO_CALL IDENTIFICADOR L_PARENT R_PARENT FIN_DE_LINEA",true,identProdLFSP);
         
         /* Metodo de los sensores */
-        gramatica.group("METODO_SENSORES", "METODO_CALL IDENTIFICADOR OP_ASIGNACION IDENTIFICADOR SIGNO_PUNTUACION_PUNTO SENSORES L_PARENT R_PARENT FIN_DE_LINEA");
-        
-        /*ERROR DE ESTRUCTURA*/
-        gramatica.group("SENSORES_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (METODO_SENSORES | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",113,
-                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("SENSORES_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (METODO_SENSORES | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",113,
-                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        
-        gramatica.delete("SENSORES_ESTRUCTURA_E");
-        /*ERROR DE ESTRUCTURA*/
-        
-        /*ERRORES DE LAS ASIGNACIONES*/
-        gramatica.group("ASIGNACIONES_E", "OP_ASIGNACION VALORES FIN_DE_LINEA",12,
-                "----------> Error_12:  Falta el identificador en la asignación, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR VALORES FIN_DE_LINEA",13,
-                "----------> Error_13:  Falta el = en la asignación, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR OP_ASIGNACION FIN_DE_LINEA",14,
-                "----------> Error_14:  Falta el valor en la asignación, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR OP_ASIGNACION VALORES",15,
-                "----------> Error_15:  Falta el ! en la asignación, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR FIN_DE_LINEA",16,
-                "----------> Error_16:  Faltan dos elementos en la asignación, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR VALORES",16,
-                "----------> Error_16:  Faltan dos elementos en la asignación, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR OP_ASIGNACION",16,
-                "----------> Error_16:  Faltan dos elementos en la asignación, Linea [#] Columna [%]");
-        /*ERRORES DE LAS ASIGNACIONES*/
-        /*ELIMINACION DE ERRORES*/
-        gramatica.delete("ASIGNACIONES_E");
-        /*ELIMINACION DE ERRORES*/
+        gramatica.group("METODO_SENSORES", "METODO_CALL IDENTIFICADOR OP_ASIGNACION IDENTIFICADOR SIGNO_PUNTUACION_PUNTO SENSORES L_PARENT R_PARENT FIN_DE_LINEA",true,identProdMS);
          
         /*ERRORES DE LLAMADAS DE FUNCION CON VALOR*/
         gramatica.group("LLAMADA_FUNCIONES_CON_VALOR_E", "IDENTIFICADOR L_PARENT VALORES (SIGNO_PUNTUACION_COMA VALORES)* R_PARENT FIN_DE_LINEA",57,
@@ -6453,56 +1864,8 @@ public class Compilador extends javax.swing.JFrame {
         gramatica.delete("METODO_SENSORES_E");
         /*ELIMINACION DE ERRORES*/
         
-        /* Estructura Begin */
-        gramatica.group("BLOQUE_BEGIN", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true);
-        
-        /*ERROR DE ESTRUCTURA*/
-        gramatica.group("OPERACION_ESTRUCTURA_E", "BEGIN L_LLAVE (OPERACIONES | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
-                "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("IMPRESORA_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",111,
-                "----------> Error_111:  El método impresora no está dentro de un bloque de función, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("SENSORES_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | METODO_SENSORES)* R_LLAVE",113,
-                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("DECLARACION_ESTRUCTURA_E", "BEGIN L_LLAVE (DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",116,
-                "----------> Error_116:  La declaración está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
-        gramatica.group("ASIGNACION_ESTRUCTURA_E", "BEGIN L_LLAVE (ASIGNACIONES | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",117,
-                "----------> Error_117:  La declaración está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "BEGIN L_LLAVE (DECLARACIONES_PUERTO | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        
-        gramatica.group("FUNCION_ESTRUCTURA_E", "BEGIN L_LLAVE (BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        
-        gramatica.group("BEGIN_ESTRUCTURA_E", "BEGIN L_LLAVE (BLOQUE_BEGIN | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | BLOQUE_BEGIN)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        
-        gramatica.delete("OPERACION_ESTRUCTURA_E");
-        gramatica.delete("IMPRESORA_ESTRUCTURA_E");
-        gramatica.delete("SENSORES_ESTRUCTURA_E");
-        gramatica.delete("DECLARACION_ESTRUCTURA_E");
-        gramatica.delete("PUERTO_ESTRUCTURA_E");
-        gramatica.delete("ASIGNACION_ESTRUCTURA_E");
-        gramatica.delete("FUNCION_ESTRUCTURA_E");
-        gramatica.delete("BEGIN_ESTRUCTURA_E");
-        /*ERROR DE ESTRUCTURA*/
-        
         /* Metodo de delay*/
-        gramatica.group("METODO_DELAY", "METODO_D L_PARENT (IDENTIFICADOR | VALORES) R_PARENT FIN_DE_LINEA");
-        
-        /*ERROR DE ESTRUCTURA*/
-        gramatica.group("DELAY_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (METODO_DELAY |OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",114,
-                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("DELAY_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (METODO_DELAY | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",114,
-                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("DELAY_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | METODO_DELAY)* R_LLAVE",114,
-                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        
-        gramatica.delete("DELAY_ESTRUCTURA_E");
-        /*ERROR DE ESTRUCTURA*/
+        gramatica.group("METODO_DELAY", "METODO_D L_PARENT (IDENTIFICADOR | VALORES) R_PARENT FIN_DE_LINEA",true,identProdMD);
         
         /*ERRORES DE METODO DELAY*/
         gramatica.group("METODO_DELAY_E", "L_PARENT (IDENTIFICADOR | VALORES) R_PARENT FIN_DE_LINEA",79,
@@ -6546,89 +1909,207 @@ public class Compilador extends javax.swing.JFrame {
         gramatica.delete("METODO_DELAY_E");
         /*ELIMINACION DE ERRORES*/
         
-        /* Estructura else */
-        gramatica.group("BLOQUE_ELSE_RELACIONAL", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE");
-        gramatica.group("BLOQUE_ELSE_LOGICO_1", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE");
-        gramatica.group("BLOQUE_ELSE_LOGICO_2", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE");
+        /* Palabras reservadas de las estructas de control */
+        gramatica.group("BEGIN","ESTRUCTURA_DE_CONTROL_B");
+        gramatica.group("LOOP","ESTRUCTURA_DE_CONTROL_L");
+        gramatica.group("FUNCION","ESTRUCTURA_DE_CONTROL_F");
+        gramatica.group("IF","ESTRUCTURA_DE_CONTROL_I");
+        gramatica.group("ELSE","ESTRUCTURA_DE_CONTROL_E");
         
-        /* Estructura If */
-        gramatica.group("BLOQUE_IF_RELACIONAL", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE");
-        gramatica.group("BLOQUE_IF_LOGICO_1", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE");
-        gramatica.group("BLOQUE_IF_LOGICO_2", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE");
+        /* Estructura Funcion */
+        gramatica.group("BLOQUE_FUNCION_CON_PARAMETROS", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",true,identProdFCP);
+        gramatica.group("BLOQUE_FUNCION_SIN_PARAMETROS", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",true,identProdFSP);
         
         /*ERROR DE ESTRUCTURA*/
-        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
+        gramatica.group("OPERACION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (OPERACIONES | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",109,
                 "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
+        gramatica.group("MOTOR_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",110,
+                "----------> Error_110:  La función del motor no está dentro de un bloque de función sin parámetros, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IMPRESORA_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",111,
+                "----------> Error_111:  El método impresora no está dentro de un bloque de función sin parámetros, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("LLAMADA_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",112,
+                "----------> Error_112:  La llamada de la función no está dentro del bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("LLAMADA_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",112,
+                "----------> Error_112:  La llamada de la función no está dentro del bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("SENSORES_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (METODO_SENSORES | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",113,
+                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("SENSORES_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (METODO_SENSORES | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",113,
+                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("DELAY_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (METODO_DELAY |OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",114,
+                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("DELAY_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (METODO_DELAY | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",114,
+                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("DECLARACION_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",115,
+                "----------> Error_115:  La declaración está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
+        gramatica.group("DECLARACION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR)* R_LLAVE",115,
+                "----------> Error_115:  La declaración está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACION_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES| ASIGNACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",116,
+                "----------> Error_116:  La asignación está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES)* R_LLAVE",116,
+                "----------> Error_116:  La asignación está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | DECLARACIONES_PUERTO)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        
+        gramatica.delete("OPERACION_ESTRUCTURA_E");
+        gramatica.delete("MOTOR_ESTRUCTURA_E");
+        gramatica.delete("IMPRESORA_ESTRUCTURA_E");
+        gramatica.delete("LLAMADA_ESTRUCTURA_E");
+        gramatica.delete("SENSORES_ESTRUCTURA_E");
+        gramatica.delete("DELAY_ESTRUCTURA_E");
+        gramatica.delete("DECLARACION_ESTRUCTURA_E");
+        gramatica.delete("ASIGNACION_ESTRUCTURA_E");
+        gramatica.delete("PUERTO_ESTRUCTURA_E");
+        gramatica.delete("FUNCION_ESTRUCTURA_E");
+        /*ERROR DE ESTRUCTURA*/
+        
+        /*ERRORES DE LAS ASIGNACIONES*/
+        gramatica.group("ASIGNACIONES_E", "OP_ASIGNACION VALORES FIN_DE_LINEA",12,
+                "----------> Error_12:  Falta el identificador en la asignación, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR VALORES FIN_DE_LINEA",13,
+                "----------> Error_13:  Falta el = en la asignación, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR OP_ASIGNACION FIN_DE_LINEA",14,
+                "----------> Error_14:  Falta el valor en la asignación, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR OP_ASIGNACION VALORES",15,
+                "----------> Error_15:  Falta el ! en la asignación, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR FIN_DE_LINEA",16,
+                "----------> Error_16:  Faltan dos elementos en la asignación, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR VALORES",16,
+                "----------> Error_16:  Faltan dos elementos en la asignación, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACIONES_E", "IDENTIFICADOR OP_ASIGNACION",16,
+                "----------> Error_16:  Faltan dos elementos en la asignación, Linea [#] Columna [%]");
+        /*ERRORES DE LAS ASIGNACIONES*/
+        /*ELIMINACION DE ERRORES*/
+        gramatica.delete("ASIGNACIONES_E");
+        /*ELIMINACION DE ERRORES*/
+        
+        /* Estructura Begin */
+        gramatica.group("BLOQUE_BEGIN", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true,identProdB);
+        
+        /*ERROR DE ESTRUCTURA*/
+        gramatica.group("OPERACION_ESTRUCTURA_E", "BEGIN L_LLAVE (OPERACIONES | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
                 "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
+        gramatica.group("IMPRESORA_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",111,
+                "----------> Error_111:  El método impresora no está dentro de un bloque de función sin parámetros, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("SENSORES_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | METODO_SENSORES)* R_LLAVE",113,
+                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("DELAY_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | METODO_DELAY)* R_LLAVE",114,
+                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("DECLARACION_ESTRUCTURA_E", "BEGIN L_LLAVE (DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",115,
+                "----------> Error_115:  La declaración está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
+        gramatica.group("ASIGNACION_ESTRUCTURA_E", "BEGIN L_LLAVE (ASIGNACIONES | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",116,
+                "----------> Error_116:  La asignación está dentro de un bloque de función o un bloque begin, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "BEGIN L_LLAVE (DECLARACIONES_PUERTO | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "BEGIN L_LLAVE (BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | BLOQUE_BEGIN)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "BEGIN L_LLAVE (BLOQUE_BEGIN | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        
+        gramatica.delete("OPERACION_ESTRUCTURA_E");
+        gramatica.delete("IMPRESORA_ESTRUCTURA_E");
+        gramatica.delete("SENSORES_ESTRUCTURA_E");
+        gramatica.delete("DELAY_ESTRUCTURA_E");
+        gramatica.delete("DECLARACION_ESTRUCTURA_E");
+        gramatica.delete("ASIGNACION_ESTRUCTURA_E");
+        gramatica.delete("PUERTO_ESTRUCTURA_E");
+        gramatica.delete("FUNCION_ESTRUCTURA_E");
+        gramatica.delete("BEGIN_ESTRUCTURA_E");
+        /*ERROR DE ESTRUCTURA*/
+
+        /* Estructura else */
+        gramatica.group("BLOQUE_ELSE_RELACIONAL", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true,identProdER);
+        gramatica.group("BLOQUE_ELSE_LOGICO_1", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true,identProdEL2V);
+        gramatica.group("BLOQUE_ELSE_LOGICO_2", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true,identProdEL1V);
+        
+        /* Estructura If */
+        gramatica.group("BLOQUE_IF_RELACIONAL", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true,identProdIR);
+        gramatica.group("BLOQUE_IF_LOGICO_1", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true,identProdIL2V);
+        gramatica.group("BLOQUE_IF_LOGICO_2", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",true,identProdIL1V);
+        
+        /*ERROR DE ESTRUCTURA*/
+        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERACIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (OPERACIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
                 "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
+        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERACIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (OPERACIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
+                "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
+        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE ELSE L_LLAVE (OPERACIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
+                "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
+        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERACIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
                 "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
         gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
                 "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERCIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
+        gramatica.group("OPERACION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (OPERACIONES | METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",109,
                 "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
         gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        
+        gramatica.group("IF_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | OPERACIONES)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)* R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)* R_LLAVE",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
         
         gramatica.delete("OPERACION_ESTRUCTURA_E");
-        gramatica.delete("IF_ESTRUCTURA_E");
-        gramatica.delete("BEGIN_ESTRUCTURA_E");
-        gramatica.delete("FUNCION_ESTRUCTURA_E");
         gramatica.delete("PUERTO_ESTRUCTURA_E");
+        gramatica.delete("FUNCION_ESTRUCTURA_E");
+        gramatica.delete("BEGIN_ESTRUCTURA_E");
+        gramatica.delete("IF_ESTRUCTURA_E");
         /*ERROR DE ESTRUCTURA*/
         
         /*ERRORES DEL BLOQUE IF CON ELSE*/
@@ -7001,35 +2482,51 @@ public class Compilador extends javax.swing.JFrame {
         /*ELIMINACION DE ERRORES*/
         
         /* Estructura Loop */
-        gramatica.group("BLOQUE_LOOP", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2)* R_LLAVE",true);
+        gramatica.group("BLOQUE_LOOP", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2)* R_LLAVE",true,identProdL);
         
         /*ERROR DE ESTRUCTURA*/
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | DECLARACIONES_PUERTO | DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR | ASIGNACIONES | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | METODO_SENSORES | METODO_DELAY | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | DECLARACIONES_PUERTO | DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR | ASIGNACIONES | OPERACIONES | LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | METODO_SENSORES | METODO_DELAY | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "BEGIN L_LLAVE (LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | DECLARACIONES_CON_VALOR | DECLARACIONES_SIN_VALOR "
+                + "| ASIGNACIONES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | OPERACIONES | METODO_SENSORES | METODO_DELAY | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 "
+                + "| BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) OPERADORES_LOGICOS (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        
+        gramatica.group("ESTRUCTURA_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | DECLARACIONES_PUERTO | OPERACIONES | BLOQUE_FUNCION_CON_PARAMETROS  BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_BEGIN | BLOQUE_LOOP)* R_LLAVE",122,
+                "----------> Error_122:  Hay una o varias estructuras fuera de lugar, Linea [#] Columna [%]");
+        
         gramatica.group("OPERACION_ESTRUCTURA_E", "LOOP L_LLAVE (OPERACIONES |METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2)* R_LLAVE",109,
                 "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("OPERACION_ESTRUCTURA_E", "OPERACIONES",109,
-                "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
-        gramatica.group("MOTOR_ESTRUCTURA_E", "(MOTORES_CON_VALOR | MOTORES_SIN_VALOR)",110,
-                "----------> Error_110:  La función del motor no está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IMPRESORA_ESTRUCTURA_E", "(IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)",111,
-                "----------> Error_111:  El método impresora no está dentro de un bloque de función, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("LLAMADA_ESTRUCTURA_E", "(LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR)",112,
-                "----------> Error_112:  La llamada de la función no está dentro del bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("SENSORES_ESTRUCTURA_E", "METODO_SENSORES",113,
-                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("DELAY_ESTRUCTURA_E", "METODO_DELAY",114,
-                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("IF_ESTRUCTURA_E", "(BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)",115,
-                "----------> Error_115:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
-        gramatica.group("PUERTO_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | DECLARACIONES_PUERTO)* R_LLAVE",118,
-                "----------> Error_118:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("FUNCION_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",119,
-                "----------> Error_119:  La función está dentro de un bloque funcion, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("BEGIN_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_BEGIN)* R_LLAVE",120,
-                "----------> Error_120:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("PUERTO_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | DECLARACIONES_PUERTO)* R_LLAVE",117,
+                "----------> Error_117:  La declaración del puerto está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("FUNCION_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_FUNCION_SIN_PARAMETROS | BLOQUE_FUNCION_CON_PARAMETROS)* R_LLAVE",118,
+                "----------> Error_118:  La función está dentro de un bloque función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("BEGIN_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_BEGIN)* R_LLAVE",119,
+                "----------> Error_119:  El bloque begin está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "(BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
         
         gramatica.group("LOOP_ESTRUCTURA_E", "FUNCION TIPO_DATOS IDENTIFICADOR L_PARENT TIPO_DATOS IDENTIFICADOR (SIGNO_PUNTUACION_COMA TIPO_DATOS IDENTIFICADOR)* R_PARENT L_LLAVE (OPERACIONES | BLOQUE_LOOP)* METODO_R IDENTIFICADOR FIN_DE_LINEA R_LLAVE",121,
                 "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
         gramatica.group("LOOP_ESTRUCTURA_E", "FUNCION IDENTIFICADOR L_PARENT R_PARENT L_LLAVE (MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* (IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | BLOQUE_LOOP)* R_LLAVE",121,
+                "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("LOOP_ESTRUCTURA_E", "BEGIN L_LLAVE (BLOQUE_LOOP | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",121,
                 "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
         gramatica.group("LOOP_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) (OPERADORES_RELACIONALES | OP_ASIGNACION) (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_LOOP)* R_LLAVE ELSE L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_LOOP)* R_LLAVE",121,
                 "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
@@ -7043,22 +2540,36 @@ public class Compilador extends javax.swing.JFrame {
                 "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
         gramatica.group("LOOP_ESTRUCTURA_E", "IF L_PARENT (IDENTIFICADOR | VALORES) R_PARENT L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_LOOP)* R_LLAVE",121,
                 "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
-        gramatica.group("LOOP_ESTRUCTURA_E", "BEGIN L_LLAVE (BLOQUE_LOOP | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR)* R_LLAVE",121,
-                "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
         gramatica.group("LOOP_ESTRUCTURA_E", "LOOP L_LLAVE (METODO_DELAY | METODO_SENSORES | IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD | ASIGNACIONES | DECLARACIONES_SIN_VALOR | DECLARACIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR | LLAMADA_FUNCIONES_CON_VALOR | MOTORES_CON_VALOR | MOTORES_SIN_VALOR | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2 | BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_LOOP)* R_LLAVE",121,
                 "----------> Error_121:  El bloque loop está dentro de un bloque de función, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
- 
+
+        gramatica.group("OPERACION_ESTRUCTURA_E", "OPERACIONES",109,
+                "----------> Error_109:  La operación no está dentro del bloque de función con parámetro, Linea [#] Columna [%]");
+        gramatica.group("MOTOR_ESTRUCTURA_E", "(MOTORES_CON_VALOR | MOTORES_SIN_VALOR)",110,
+                "----------> Error_110:  La función del motor no está dentro de un bloque de función sin parámetros, un bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IMPRESORA_ESTRUCTURA_E", "(IMPRESORA_A_CONSOLA | IMPRESORA_A_LCD)",111,
+                "----------> Error_111:  El método impresora no está dentro de un bloque de función sin parámetros, un bloque if o un bloque loop, Linea [#] Columna [%]"); 
+        gramatica.group("LLAMADA_ESTRUCTURA_E", "(LLAMADA_FUNCIONES_CON_VALOR | LLAMADA_FUNCIONES_SIN_VALOR)",112,
+                "----------> Error_112:  La llamada de la función no está dentro del bloque begin, un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("SENSORES_ESTRUCTURA_E", "METODO_SENSORES",113,
+                "----------> Error_113:  La función del método del sensor no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("DELAY_ESTRUCTURA_E", "METODO_DELAY",114,
+                "----------> Error_114:  El método delay no está dentro de un bloque if o un bloque loop, Linea [#] Columna [%]");
+        gramatica.group("IF_ESTRUCTURA_E", "(BLOQUE_ELSE_RELACIONAL | BLOQUE_ELSE_LOGICO_1 | BLOQUE_ELSE_LOGICO_2 | BLOQUE_IF_RELACIONAL | BLOQUE_IF_LOGICO_1 | BLOQUE_IF_LOGICO_2)",120,
+                "----------> Error_120:  El bloque if no está dentro del bloque loop, Linea [#] Columna [%]");
+        
         gramatica.delete("OPERACION_ESTRUCTURA_E");
         gramatica.delete("MOTOR_ESTRUCTURA_E");
         gramatica.delete("IMPRESORA_ESTRUCTURA_E");
         gramatica.delete("LLAMADA_ESTRUCTURA_E");
         gramatica.delete("SENSORES_ESTRUCTURA_E");
         gramatica.delete("DELAY_ESTRUCTURA_E");
-        gramatica.delete("IF_ESTRUCTURA_E");
+        gramatica.delete("PUERTO_ESTRUCTURA_E");
         gramatica.delete("FUNCION_ESTRUCTURA_E");
         gramatica.delete("BEGIN_ESTRUCTURA_E");
-        gramatica.delete("PUERTO_ESTRUCTURA_E");
+        gramatica.delete("IF_ESTRUCTURA_E");
         gramatica.delete("LOOP_ESTRUCTURA_E");
+        gramatica.delete("ESTRUCTURA_ESTRUCTURA_E");
         /*ERROR DE ESTRUCTURA*/
         
         /*ERRORES DE BLOQUE BEGIN*/
@@ -7118,10 +2629,9 @@ public class Compilador extends javax.swing.JFrame {
                 "----------> Error_107:  La { no está en ninguna estructura, Linea [#] Columna [%]");
         gramatica.group("ESTRUCTURAS_E","R_LLAVE",108,
                 "----------> Error_108:  La } no está en ninguna estructura, Linea [#] Columna [%]");
-        /*ERRORES DE ESTRUCTURAS*/
-        /*ELIMINACION DE ERRORES*/
+        
         gramatica.delete("ESTRUCTURAS_E");
-        /*ELIMINACION DE ERRORES*/
+        /*ERRORES DE ESTRUCTURAS*/
         
         /* Bloque de Begin y Loop*/
         gramatica.group("BLOQUE_GLOBAL_BL", "(BLOQUE_LOOP | BLOQUE_BEGIN)*");
@@ -7152,6 +2662,127 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void semanticAnalysis() {
+        //DECLARACIONES 
+        for(Production p : identProdDP){
+            if(identificadoresC == null){
+                identificadoresC.put(p.lexemeRank(2),"SENSOR");
+            }
+            if(identificadoresC.containsKey(p.lexemeRank(2))){
+                errors.add(new ErrorLSSL(125, "----------> Error_125:  La variable ya ha sido declarada, Linea [#] Columna [%]",p, true));
+            }
+            identificadoresC.put(p.lexemeRank(2),"SENSOR");
+        }
+        
+        for(Production p : identProdDCV){
+            if(identificadoresC == null){
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+                }
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+                }
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+                }
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
+                }
+                
+            }
+            if(identificadoresC.containsKey(p.lexemeRank(2))){
+                errors.add(new ErrorLSSL(125, "----------> Error_125:  La variable ya ha sido declarada, Linea [#] Columna [%]",p, true));
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
+                if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_ENTERO")){
+                    if(Integer.parseInt(p.lexemeRank(-2)) <= 500000){
+                        identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+                        identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    }else{
+                        errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
+                    }
+                }else{
+                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                }
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
+                if(p.lexicalCompRank(-2).equals("VALOR_CADENA")){
+                    if(p.lexemeRank(-2).length() <= 100){
+                        identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+                        identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    }else{
+                        errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
+                    }
+                }else{
+                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                }
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
+                if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_REAL")){
+                    if(Double.parseDouble(p.lexemeRank(-2)) <= 999.9999){
+                        identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+                        identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    }else{
+                        errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
+                    }
+                }else{
+                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                }
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
+                if(p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_T") || p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_F")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
+                    identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                }else{
+                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                }
+            }
+        }
+        
+        for(Production p : identProdDSV){
+            if(identificadoresC == null){
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+                }
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+                }
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+                }
+                if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
+                    identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
+                }
+            }
+            if(identificadoresC.containsKey(p.lexemeRank(2))){
+                errors.add(new ErrorLSSL(125, "----------> Error_125:  La variable ya ha sido declarada, Linea [#] Columna [%]",p, true));
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
+                identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
+                identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
+                identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+            }
+            if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
+                identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
+            }
+        }
+        //DECLARACIONES 
+        
+        //ASIGNACIONES
+        for(Production p : identProdA){
+            
+        }
+        //ASIGNACIONES
+        System.out.print(identificadoresC);
+        System.out.print(identificadoresV);
+        System.out.print(identificadoresT);
     }
 
     private void colorAnalysis() {
@@ -7213,8 +2844,32 @@ public class Compilador extends javax.swing.JFrame {
         jtaOutputConsole.setText("");
         tokens.clear();
         errors.clear();
-        identProd.clear();
-        identificadores.clear();
+        identProdDP.clear();
+        identProdDCV.clear();
+        identProdDSV.clear();
+        identProdA.clear();
+        identProdLFCP.clear();
+        identProdLFSP.clear();
+        identProdO.clear();
+        identProdFMCV.clear();
+        identProdFMSV.clear();
+        identProdFCP.clear();
+        identProdFSP.clear();
+        identProdMD.clear();
+        identProdMS.clear();
+        identProdMIC.clear();
+        identProdMIL.clear();
+        identProdB.clear();
+        identProdL.clear();
+        identProdIR.clear();
+        identProdIL2V.clear();
+        identProdIL1V.clear();
+        identProdER.clear();
+        identProdEL2V.clear();
+        identProdEL1V.clear();
+        identificadoresC.clear();
+        identificadoresV.clear();
+        identificadoresT.clear();
         codeHasBeenCompiled = false;
         Functions.clearDataInTable(T.tokens());
         Functions.clearDataInTable(Error.TablaL());
@@ -7283,9 +2938,14 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
+    private javax.swing.JMenuItem jMenuItem16;
+    private javax.swing.JMenuItem jMenuItem17;
+    private javax.swing.JMenuItem jMenuItem18;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

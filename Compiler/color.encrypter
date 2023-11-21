@@ -8,9 +8,9 @@ port_7 temperature temperatureSensor!
 #Declaracion e iniacializacion de variables
 var int number1!
 var decimal number2!
-const string number3!
-
-var string Hola = 'HolaMundo'!
+const string H!
+ var int Holas = 500001!
+var string Hola = 'HOLA'!
 
 number1 = 3 !
 number2 = 3.3 !
@@ -22,15 +22,13 @@ number2 = 3.3 !
 #funcion suma simple
 var int result!
 
-function int sumaNumerosInt(int B,int a){
-   operation result = a + b!
+function int hOAL(int B,int a){  
    return result!
 }
 
 #funcion mover motor1
 function moverMotor(){
    move(Hola)!
-   operation result = a + b!
    print(console,'El motor1 se esta moviendo')!
 }
 
@@ -44,15 +42,11 @@ function detenerMotor(){
 function escribirLCD(){
    print(standarLCD, n)!
 }
-
-   operation h = a + b!
 begin{
-   operation h = a + b!
    call moverMotor()! # El motor se enciende y se mueve
    call detenerMotor()! # El motor se deteiene inmediatamente despues
    call escribirLCD(5)! # El standarLCD escribe en su pantalla el numero 5
 }
-
 var int d !
 
 #Al final del begin se debe declarar el bloque de proceso "loop"
