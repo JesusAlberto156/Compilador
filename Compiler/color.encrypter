@@ -2,16 +2,18 @@
 port_1 proximity proximitySensor!
 port_2 motor motor1!
 port_3 LED_RGB rgbLED!
-port_6 button ButtonIN!
+port_4 LCD lcd!
+port_6 button rgbLEDS!
 port_7 temperature temperatureSensor!
 
 #Declaracion e iniacializacion de variables
 var int number1!
 var decimal number2!
-const string H!
- var int Holas = 500001!
+const string H = 'Hola'!
+var int Holas = 500000!
 var string Hola = 'HOLA'!
 
+Hola = 'Hola'!
 number1 = 3 !
 number2 = 3.3 !
 
@@ -28,7 +30,7 @@ function int hOAL(int B,int a){
 
 #funcion mover motor1
 function moverMotor(){
-   move(Hola)!
+   move(motor1,35)!
    print(console,'El motor1 se esta moviendo')!
 }
 
@@ -40,7 +42,7 @@ function detenerMotor(){
 
 #funcion escribir un numero en la pantalla LCD
 function escribirLCD(){
-   print(standarLCD, n)!
+   print(lcd, H)!
 }
 begin{
    call moverMotor()! # El motor se enciende y se mueve
@@ -58,8 +60,8 @@ loop{
   }else{ # Si numro 1 es mayor a numero 2 se mueve el motor
     call detenerMotor()!  
   }
-  delay(100)!
-  call Distancia = puerto1.distance()!
+  delay(1000)!
+  call Hola = motor1.state()!
   #number1 = read(temperatureSensor!)
   number2 = 25.0 !
   # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados
