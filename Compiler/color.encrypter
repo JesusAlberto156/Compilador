@@ -1,36 +1,43 @@
 #Puertos
-port_1 proximity proximitySensor!
+
+port_1 proximity promitySensor!
 port_2 motor motor1!
 port_3 LED_RGB rgbLED!
-port_4 LCD lcd!
-port_6 button rgbLEDS!
+port_6 button ButtonIN!
 port_7 temperature temperatureSensor!
 
 #Declaracion e iniacializacion de variables
 var int number1!
 var decimal number2!
-const string H = 'Hola'!
-var int Holas = 500000!
-var string Hola = 'HOLA'!
+const string number3!
+var boolean bandera = false!
+bandera = true!
+var string cadena2!
 
-Hola = 'Hola'!
+
+var string holaMundo = 'HolaMundo'!
+
 number1 = 3 !
 number2 = 3.3 !
-
+number3 = 4!
 # Todas las variables se deben declarar fuera de los bloques o funciones
 # y antes de uso 
 # Declaracion de funciones
 
 #funcion suma simple
 var int result!
+var int contador!
+var int aux = 0!
 
-function int hOAL(int B,int a){  
+function int sumaNumerosInt(int a, int b){
+   operation result = a / b!
+   operation contador = a + aux!
    return result!
 }
 
 #funcion mover motor1
 function moverMotor(){
-   move(motor1,35)!
+   move(motor1,180)!
    print(console,'El motor1 se esta moviendo')!
 }
 
@@ -42,15 +49,14 @@ function detenerMotor(){
 
 #funcion escribir un numero en la pantalla LCD
 function escribirLCD(){
-   print(lcd, H)!
+   print(standarLCD, n)!
 }
+
 begin{
    call moverMotor()! # El motor se enciende y se mueve
    call detenerMotor()! # El motor se deteiene inmediatamente despues
    call escribirLCD(5)! # El standarLCD escribe en su pantalla el numero 5
 }
-var int d !
-
 #Al final del begin se debe declarar el bloque de proceso "loop"
 # este se llama automaticamente después del begin y se ejecuta en ciclo hasta
 # que se apague el dispositivo o se ponga la instrucion end
@@ -59,10 +65,11 @@ loop{
     call moverMotor()!
   }else{ # Si numro 1 es mayor a numero 2 se mueve el motor
     call detenerMotor()!  
+    number2 = 30.0!
   }
-  delay(1000)!
-  call Hola = motor1.state()!
-  #number1 = read(temperatureSensor!)
-  number2 = 25.0 !
-  # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados
+  if(number3 and number2){}
+  if(number1 >= number2){}
+   #number1 = read(temperatureSensor!)
+  number2 = 0 !
+  # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados
 }

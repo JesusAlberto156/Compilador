@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -234,6 +235,8 @@ public class Compilador extends javax.swing.JFrame {
         jMenuItem14 = new javax.swing.JMenuItem();
         jMenuItem16 = new javax.swing.JMenuItem();
         jMenu7 = new javax.swing.JMenu();
+        btnCodigo1 = new javax.swing.JMenuItem();
+        btnCodigo2 = new javax.swing.JMenuItem();
         jMenu6 = new javax.swing.JMenu();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMenuItem17 = new javax.swing.JMenuItem();
@@ -524,6 +527,23 @@ public class Compilador extends javax.swing.JFrame {
         jMenuBar1.add(jMenu5);
 
         jMenu7.setText("Código ejemplo");
+
+        btnCodigo1.setText("Codigo 1");
+        btnCodigo1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCodigo1ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(btnCodigo1);
+
+        btnCodigo2.setText("Codigo 2");
+        btnCodigo2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCodigo2ActionPerformed(evt);
+            }
+        });
+        jMenu7.add(btnCodigo2);
+
         jMenuBar1.add(jMenu7);
 
         jMenu6.setText("Tablas");
@@ -747,6 +767,22 @@ public class Compilador extends javax.swing.JFrame {
         jtaOutputConsole.setFont(font);
     }//GEN-LAST:event_jButton10ActionPerformed
 
+    private void btnCodigo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodigo1ActionPerformed
+        URL ruta = getClass().getResource("/Codigos/codigo1.comp");
+        String rutaNueva = ruta.getFile();
+        jtpCode.setText(leerArchivo(rutaNueva.replaceAll("%20"," ")));
+        colorAnalysis();
+        clearFields();
+    }//GEN-LAST:event_btnCodigo1ActionPerformed
+
+    private void btnCodigo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodigo2ActionPerformed
+        URL ruta = getClass().getResource("/Codigos/codigo2.comp");
+        String rutaNueva = ruta.getFile();
+        jtpCode.setText(leerArchivo(rutaNueva.replaceAll("%20"," ")));
+        colorAnalysis();
+        clearFields();
+    }//GEN-LAST:event_btnCodigo2ActionPerformed
+
     private void compile() {
         clearFields();
         lexicalAnalysis();
@@ -756,7 +792,22 @@ public class Compilador extends javax.swing.JFrame {
         printConsole();
         codeHasBeenCompiled = true;
     }
-
+    private String leerArchivo(String direccion){
+        String texto = "";
+        
+        try{
+            BufferedReader bf = new BufferedReader(new FileReader(direccion));
+            String temp = "";
+            String bfRead;
+            while((bfRead = bf.readLine()) != null){
+                temp = temp + bfRead+"\n";
+            }
+            texto = temp;
+        }catch(Exception e){
+        
+        }
+        return texto;
+    }
     private void lexicalAnalysis() {
         // Extraer tokens
         Lexer lexer;
@@ -7930,6 +7981,8 @@ public class Compilador extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAbrir;
+    private javax.swing.JMenuItem btnCodigo1;
+    private javax.swing.JMenuItem btnCodigo2;
     private javax.swing.JButton btnCompilar;
     private javax.swing.JButton btnEjecutar;
     private javax.swing.JButton btnGuardar;
