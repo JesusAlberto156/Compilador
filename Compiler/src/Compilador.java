@@ -28,6 +28,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.showMessageDialog;
 import javax.swing.Timer;
 
 /**
@@ -41,6 +42,7 @@ public class Compilador extends javax.swing.JFrame {
     private Errores Error = new Errores();
     private Estructuras E = new Estructuras();
     private CodigoIntermedio CI = new CodigoIntermedio();
+    private Simbolos S = new Simbolos();
     
     private String title;
     private Directory directorio;
@@ -88,7 +90,7 @@ public class Compilador extends javax.swing.JFrame {
         title = "RoboKit Compilador";
         setLocationRelativeTo(null);
         setTitle(title);
-        directorio = new Directory(this, jtpCode, title, ".comp");
+        directorio = new Directory(this, jtpCode, title, ".RBK");
         addWindowListener(new WindowAdapter() {// Cuando presiona la "X" de la esquina superior derecha
             @Override
             public void windowClosing(WindowEvent e) {
@@ -243,8 +245,6 @@ public class Compilador extends javax.swing.JFrame {
         jMenuItem17 = new javax.swing.JMenuItem();
         jMenuItem21 = new javax.swing.JMenuItem();
         jMenuItem13 = new javax.swing.JMenuItem();
-        jMenuItem19 = new javax.swing.JMenuItem();
-        jMenuItem20 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -569,6 +569,11 @@ public class Compilador extends javax.swing.JFrame {
         jMenu6.add(jMenuItem17);
 
         jMenuItem21.setText("Simbolos");
+        jMenuItem21.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem21ActionPerformed(evt);
+            }
+        });
         jMenu6.add(jMenuItem21);
 
         jMenuItem13.setText("Errores");
@@ -578,17 +583,6 @@ public class Compilador extends javax.swing.JFrame {
             }
         });
         jMenu6.add(jMenuItem13);
-
-        jMenuItem19.setText("Código intermedio");
-        jMenuItem19.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem19ActionPerformed(evt);
-            }
-        });
-        jMenu6.add(jMenuItem19);
-
-        jMenuItem20.setText("Código ensamblador");
-        jMenu6.add(jMenuItem20);
 
         jMenuBar1.add(jMenu6);
 
@@ -741,16 +735,6 @@ public class Compilador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem12ActionPerformed
 
-    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
-        T.setVisible(true);
-        T.setLocationRelativeTo(this);
-    }//GEN-LAST:event_jMenuItem10ActionPerformed
-
-    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
-        Error.setVisible(true);
-        Error.setLocationRelativeTo(this);
-    }//GEN-LAST:event_jMenuItem13ActionPerformed
-
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         String fontName = jtpCode.getFont().getFontName();
         int fontSize = jtpCode.getFont().getSize() - 2;
@@ -809,16 +793,6 @@ public class Compilador extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem11ActionPerformed
 
-    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
-        E.setVisible(true);
-        E.setLocationRelativeTo(this);
-    }//GEN-LAST:event_jMenuItem17ActionPerformed
-
-    private void jMenuItem19ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem19ActionPerformed
-        CI.setVisible(true);
-        CI.setLocationRelativeTo(this);
-    }//GEN-LAST:event_jMenuItem19ActionPerformed
-
     private void btnCodigo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCodigo1ActionPerformed
         URL ruta = getClass().getResource("/Codigos/codigo1.comp");
         String rutaNueva = ruta.getFile();
@@ -834,6 +808,26 @@ public class Compilador extends javax.swing.JFrame {
         colorAnalysis();
         clearFields();
     }//GEN-LAST:event_btnCodigo2ActionPerformed
+
+    private void jMenuItem13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem13ActionPerformed
+        Error.setVisible(true);
+        Error.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem17ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem17ActionPerformed
+        E.setVisible(true);
+        E.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jMenuItem17ActionPerformed
+
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+        T.setVisible(true);
+        T.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
+    private void jMenuItem21ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem21ActionPerformed
+        S.setVisible(true);
+        S.setLocationRelativeTo(this);
+    }//GEN-LAST:event_jMenuItem21ActionPerformed
 
     private void compile() {
         clearFields();
@@ -2648,12 +2642,14 @@ public class Compilador extends javax.swing.JFrame {
             if(identificadoresC == null){
                 identificadoresC.put(p.lexemeRank(2),"SENSOR");
                 identificadoresV.put(p.lexemeRank(2),p.lexemeRank(1));
+                S.Simbolos().append(p.lexemeRank(2)+" ----> SENSOR ----> "+p.lexemeRank(1)+"\n");
             }
             if(identificadoresC.containsKey(p.lexemeRank(2))){
                 errors.add(new ErrorLSSL(125, "----------> Error_125:  La variable ya ha sido declarada, Linea [#] Columna [%]",p, true));
             }
             identificadoresC.put(p.lexemeRank(2),"SENSOR");
             identificadoresV.put(p.lexemeRank(2),p.lexemeRank(1));
+            S.Simbolos().append(p.lexemeRank(2)+" ----> SENSOR ----> "+p.lexemeRank(1)+"\n");
         }
         
         for(Production p : identProdDCV){
@@ -2661,18 +2657,22 @@ public class Compilador extends javax.swing.JFrame {
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> "+p.lexemeRank(-2)+"\n");
                 }
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> "+p.lexemeRank(-2)+"\n");
                 }
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> "+p.lexemeRank(-2)+"\n");
                 }
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> "+p.lexemeRank(-2)+"\n");
                 }
                 
             }
@@ -2685,6 +2685,7 @@ public class Compilador extends javax.swing.JFrame {
                         identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
                         identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
                         identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                        S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> "+p.lexemeRank(-2)+"\n");
                     }else{
                         errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
                     }
@@ -2698,6 +2699,7 @@ public class Compilador extends javax.swing.JFrame {
                         identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
                         identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
                         identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                        S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> "+p.lexemeRank(-2)+"\n");
                     }else{
                         errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
                     }
@@ -2711,6 +2713,7 @@ public class Compilador extends javax.swing.JFrame {
                         identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
                         identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
                         identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                        S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> "+p.lexemeRank(-2)+"\n");
                     }else{
                         errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
                     }
@@ -2723,6 +2726,7 @@ public class Compilador extends javax.swing.JFrame {
                     identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
                     identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> "+p.lexemeRank(-2)+"\n");
                 }else{
                     errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
                 }
@@ -2734,18 +2738,22 @@ public class Compilador extends javax.swing.JFrame {
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> Todavia no cuenta con valor\n");
                 }
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> Todavia no cuenta con valor\n");
                 }
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> Todavia no cuenta con valor\n");
                 }
                 if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
                     identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> Todavia no cuenta con valor\n");
                 }
             }
             if(identificadoresC.containsKey(p.lexemeRank(2))){
@@ -2754,18 +2762,22 @@ public class Compilador extends javax.swing.JFrame {
             if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
                 identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
                 identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> Todavia no cuenta con valor\n");
             }
             if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
                 identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
                 identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> Todavia no cuenta con valor\n");
             }
             if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
                 identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
                 identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> Todavia no cuenta con valor\n");
             }
             if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
                 identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
                 identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> Todavia no cuenta con valor\n");
             }
         }
         //DECLARACIONES 
@@ -2780,6 +2792,7 @@ public class Compilador extends javax.swing.JFrame {
                         if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_ENTERO")){
                             if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_ENTERO")){
                                 identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_ENTERO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                             }else{
                                 errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                             }
@@ -2787,6 +2800,7 @@ public class Compilador extends javax.swing.JFrame {
                         if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_DECIMAL")){
                             if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_REAL")){
                                 identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_DECIMAL ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                             }else{
                                 errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                             }
@@ -2794,6 +2808,7 @@ public class Compilador extends javax.swing.JFrame {
                         if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_STRING")){
                             if(p.lexicalCompRank(-2).equals("VALOR_CADENA")){
                                 identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_STRING ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                             }else{
                                 errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                             }
@@ -2801,6 +2816,7 @@ public class Compilador extends javax.swing.JFrame {
                         if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_BOOLEANO")){
                             if(p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_T") || p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_F")){
                                 identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_BOOLEANO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                             }else{
                                 errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                             }
@@ -2810,6 +2826,7 @@ public class Compilador extends javax.swing.JFrame {
                     if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_ENTERO")){
                         if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_ENTERO")){
                             identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_ENTERO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                         }else{
                             errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                         }
@@ -2817,6 +2834,7 @@ public class Compilador extends javax.swing.JFrame {
                     if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_DECIMAL")){
                         if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_REAL")){
                             identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_DECIMAL ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                         }else{
                             errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                         }
@@ -2824,6 +2842,7 @@ public class Compilador extends javax.swing.JFrame {
                     if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_STRING")){
                         if(p.lexicalCompRank(-2).equals("VALOR_CADENA")){
                             identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_STRING ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                         }else{
                             errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                         }
@@ -2831,6 +2850,7 @@ public class Compilador extends javax.swing.JFrame {
                     if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_BOOLEANO")){
                         if(p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_T") || p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_F")){
                             identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_BOOLEANO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
                         }else{
                             errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
                         }
@@ -3297,6 +3317,7 @@ public class Compilador extends javax.swing.JFrame {
         Functions.clearDataInTable(Error.TablaL());
         E.estructuras().setText("Componentes Léxicos ----> Lexemas ----> [Fila, Columna]\n");
         CI.cuadruplos().setText("Num --> Operador --> Operando 1 --> Operando 2 --> Resultado\n");
+        S.Simbolos().setText("Variable ----> Tipo Dato ----> Valor\n");
     }
     private void executeCode(ArrayList<String> blocksOfCode,int repeats){
         int temporal = 0;
@@ -3324,6 +3345,128 @@ public class Compilador extends javax.swing.JFrame {
                 }
             }
         }
+        showMessageDialog(this,"Genera este codigo ensamblador\n\nLIST P=16F887\n" +
+"INCLUDE <P16F887.INC>\n" +
+"__CONFIG _CONFIG1, _FOSC_INTRC_NOCLKOUT & _WDTE_OFF & _PWRTE_OFF & _LVP_OFF\n" +
+"\n" +
+"CBLOCK  0x20\n" +
+"highfactor,\n" +
+"highfactor1    \n" +
+"ENDC\n" +
+"\n" +
+"TMR0_LOAD equ   .164	; Approximate value for 100 us of timing.\n" +
+"\n" +
+"#define OUTPUT  PORTB,0	; Rename RB0 as OUTPUT\n" +
+"#define	OUTPUT1	PORTB,1\n" +
+"#define	OUTPUT2	PORTB,2\n" +
+" \n" +
+"#define INPUT1  PORTA,0	; Rename RA0 as INPUT1\n" +
+"#define INPUT2  PORTA,1	; Rename RA1 as INPUT2\n" +
+"\n" +
+"org	    0x00  \n" +
+"goto    Main\n" +
+"org	    0x04\n" +
+"goto    TIMER0_Interrupt	; Interruption vector.\n" +
+"\n" +
+"Main\n" +
+"    bsf     STATUS,6    ; Seleccionar el banco 3.\n" +
+"    bsf     STATUS,5\n" +
+"    clrf    ANSEL   ; PORTA y PORTB funcionan digitalmente,\n" +
+"    clrf    ANSELH\n" +
+"    movlw   0xD8\n" +
+"    movwf   OPTION_REG ; El reloj de TIMER0 es igual a Fosc/4, prescaler para WDT.\n" +
+"    \n" +
+"    ; Configuración para el puerto B\n" +
+"    bcf     STATUS,6    ; Seleccionar el banco 1.\n" +
+"    movlw   0x61\n" +
+"    movwf   OSCCON   ; Oscilador interno predeterminado a 4MHz.\n" +
+"    bcf     TRISB,0 ; RB0 funciona como salida.\n" +
+"    bcf	    TRISB,1\n" +
+"    bcf	    TRISB,2\n" +
+"    ; Configuración para el puerto C\n" +
+"    bcf     TRISC,2 ; RC2 funciona como salida. para encender el LED\n" +
+"\n" +
+"    bcf     STATUS,5   ; Seleccionar el banco 0.\n" +
+"    clrf    PORTB\n" +
+"    clrf    PORTC  ; Asegurar que RC0 esté apagado al inicio.\n" +
+"    movlw   TMR0_LOAD\n" +
+"    movwf   TMR0    ; TIMER0 se iguala a 164.\n" +
+"    movlw   0xA0\n" +
+"    movwf   INTCON  ; GIE = 1 e interrupción de desbordamiento de Timer0.\n" +
+"Loop\n" +
+"    \n" +
+"    btfss   INPUT1	;RA0 == 0? Servomotor at 0°.\n" +
+"    call    Condition1\n" +
+"    btfss   INPUT2	;RA1 == 0? Servomotor at 180°.\n" +
+"    call    Condition2\n" +
+"    goto    Loop\n" +
+"\n" +
+"Condition1		;Load 5 to highfactor.\n" +
+"    call    Delay_50ms\n" +
+"    btfsc   INPUT1\n" +
+"    return  \n" +
+"Stay1	\n" +
+"    btfss   INPUT1\n" +
+"    goto    Stay1\n" +
+"    bsf     PORTC, 2   ; Enciende el LED\n" +
+"    movlw   .11\n" +
+"    movwf   highfactor\n" +
+"    return\n" +
+"\n" +
+"Condition2		;Load 22 to highfactor.\n" +
+"    call    Delay_50ms\n" +
+"    btfsc   INPUT2\n" +
+"    return\n" +
+"Stay2\n" +
+"    btfss   INPUT2\n" +
+"    goto    Stay2\n" +
+"    bcf     PORTC, 2   ; Apaga el led colocandolo en 0\n" +
+"    movlw   .22\n" +
+"    movwf   highfactor\n" +
+"    return\n" +
+"\n" +
+"CBLOCK\n" +
+"timer0_counter\n" +
+"ENDC\n" +
+"\n" +
+";///////////////////////////////////////////////////////////////////////\n" +
+"TIMER0_Interrupt	    \n" +
+"    movlw   TMR0_LOAD	    ; Load TIMER0 with the value of TMR0_LOAD\n" +
+"    movwf   TMR0	    \n" +
+"    decfsz  timer0_counter  ; Decrements by one unit, jump if it's zero\n" +
+"    goto    EndInterrupt    ; Go to EndInterrupt\n" +
+"    btfsc   OUTPUT	    ; Complements the value of the output.\n" +
+"    goto    HighS	    \n" +
+"    btfsc   OUTPUT1	    ; Complements the value of the output.\n" +
+"    goto    HighS1\n" +
+"LowS1			    ; set the output to zero.\n" +
+"    bsf	    OUTPUT1\n" +
+"    movf    highfactor1,W    ; Time the signal is high.\n" +
+"    movwf   timer0_counter\n" +
+"    goto    EndInterrupt\n" +
+"\n" +
+"HighS1	\n" +
+"    bcf	    OUTPUT1	    ; Set the output to one.\n" +
+"    movf    highfactor1,W    \n" +
+"    sublw   .200	    ; Time the signal is low.\n" +
+"    movwf   timer0_counter    \n" +
+"LowS			    ; set the output to zero.\n" +
+"    bsf	    OUTPUT\n" +
+"    movf    highfactor,W    ; Time the signal is high.\n" +
+"    movwf   timer0_counter\n" +
+"    goto    EndInterrupt\n" +
+"\n" +
+"HighS	\n" +
+"    bcf	    OUTPUT	    ; Set the output to one.\n" +
+"    movf    highfactor,W    \n" +
+"    sublw   .200	    ; Time the signal is low.\n" +
+"    movwf   timer0_counter\n" +
+"    \n" +
+"EndInterrupt\n" +
+"    bcf	    INTCON,2	    ; Clear interrupt bit of TIMER0.\n" +
+"    retfie\n" +
+"    INCLUDE <C:\\Users\\Alex\\Downloads\\DELAYS.inc>\n" +
+"END");
     }
     /**
      * @param args the command line arguments
@@ -3394,9 +3537,7 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem14;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
-    private javax.swing.JMenuItem jMenuItem19;
     private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem20;
     private javax.swing.JMenuItem jMenuItem21;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
