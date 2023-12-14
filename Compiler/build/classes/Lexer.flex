@@ -54,21 +54,39 @@ Error2 = {GuionBajo}({GuionBajo})*
 {NumeroReal} { return token(yytext(), "VALOR_NUMERO_REAL", yyline, yycolumn); }
 
 /* Puertos */
-port_1 { return token(yytext(), "PUERTO_1", yyline, yycolumn); }
-port_2 { return token(yytext(), "PUERTO_2", yyline, yycolumn); }
-port_3 { return token(yytext(), "PUERTO_3", yyline, yycolumn); }
-port_4 { return token(yytext(), "PUERTO_4", yyline, yycolumn); }
-port_5 { return token(yytext(), "PUERTO_5", yyline, yycolumn); }
-port_6 { return token(yytext(), "PUERTO_6", yyline, yycolumn); }
-port_7 { return token(yytext(), "PUERTO_7", yyline, yycolumn); }
-port_8 { return token(yytext(), "PUERTO_8", yyline, yycolumn); }
-port_9 { return token(yytext(), "PUERTO_9", yyline, yycolumn); }
+port_A0 { return token(yytext(), "PUERTO_A0", yyline, yycolumn); }
+port_A1 { return token(yytext(), "PUERTO_A1", yyline, yycolumn); }
+port_A2 { return token(yytext(), "PUERTO_A2", yyline, yycolumn); }
+port_A3 { return token(yytext(), "PUERTO_A3", yyline, yycolumn); }
+port_A4 { return token(yytext(), "PUERTO_A4", yyline, yycolumn); }
+port_A5 { return token(yytext(), "PUERTO_A5", yyline, yycolumn); }
+port_B0 { return token(yytext(), "PUERTO_B0", yyline, yycolumn); }
+port_B1 { return token(yytext(), "PUERTO_B1", yyline, yycolumn); }
+port_B2 { return token(yytext(), "PUERTO_B2", yyline, yycolumn); }
+port_B3 { return token(yytext(), "PUERTO_B3", yyline, yycolumn); }
+port_B4 { return token(yytext(), "PUERTO_B4", yyline, yycolumn); }
+port_B5 { return token(yytext(), "PUERTO_B5", yyline, yycolumn); }
+port_B6 { return token(yytext(), "PUERTO_B6", yyline, yycolumn); }
+port_B7 { return token(yytext(), "PUERTO_B7", yyline, yycolumn); }
+port_C2 { return token(yytext(), "PUERTO_C2", yyline, yycolumn); }
+port_C3 { return token(yytext(), "PUERTO_C3", yyline, yycolumn); }
+port_C4 { return token(yytext(), "PUERTO_C4", yyline, yycolumn); }
+port_C5 { return token(yytext(), "PUERTO_C5", yyline, yycolumn); }
+port_C6 { return token(yytext(), "PUERTO_C6", yyline, yycolumn); }
+port_C7 { return token(yytext(), "PUERTO_C7", yyline, yycolumn); }
+port_D0 { return token(yytext(), "PUERTO_D0", yyline, yycolumn); }
+port_D1 { return token(yytext(), "PUERTO_D1", yyline, yycolumn); }
+port_D2 { return token(yytext(), "PUERTO_D2", yyline, yycolumn); }
+port_D3 { return token(yytext(), "PUERTO_D3", yyline, yycolumn); }
+port_D4 { return token(yytext(), "PUERTO_D4", yyline, yycolumn); }
+port_D5 { return token(yytext(), "PUERTO_D5", yyline, yycolumn); }
+port_D6 { return token(yytext(), "PUERTO_D6", yyline, yycolumn); }
+port_D7 { return token(yytext(), "PUERTO_D7", yyline, yycolumn); }
 
 /* Tipos de puertos */
 proximity { return token(yytext(), "TIPO_PUERTO_PROXIMITY", yyline, yycolumn); }
 temperature { return token(yytext(), "TIPO_PUERTO_TEMPERATURE", yyline, yycolumn); }
 LED { return token(yytext(), "TIPO_PUERTO_LED", yyline, yycolumn); }
-LED_RGB { return token(yytext(), "TIPO_PUERTO_LED_RGB", yyline, yycolumn); }
 LCD { return token(yytext(), "TIPO_PUERTO_LCD", yyline, yycolumn); }
 button { return token(yytext(), "TIPO_PUERTO_BUTTON", yyline, yycolumn); }
 motor { return token(yytext(), "TIPO_PUERTO_MOTOR", yyline, yycolumn); }
@@ -95,6 +113,7 @@ console { return token(yytext(), "METODO_C", yyline, yycolumn); }
 delay { return token(yytext(), "METODO_D", yyline, yycolumn); }
 operation { return token(yytext(), "METODO_O", yyline, yycolumn); }
 call { return token(yytext(), "METODO_CALL", yyline, yycolumn); }
+ligther { return token(yytext(), "METODO_L", yyline, yycolumn); }
 
 /*Palabras para el valor condicional*/
 true { return token(yytext(), "VALOR_CONDICIONAL_T", yyline, yycolumn); }

@@ -59,21 +59,39 @@ Error2 = {GuionBajo}({GuionBajo})
 
 {NumeroReal} { return textColor(yychar, yylength(), new Color(146, 146, 146)); }
 
-port_1|
-port_2|
-port_3|
-port_4|
-port_5|
-port_6|
-port_7|
-port_8|
-port_9  { return textColor(yychar, yylength(), new Color(186, 143, 86)); }
+port_A0|
+port_A1|
+port_A2|
+port_A3|
+port_A4|
+port_A5|
+port_B0|
+port_B1|
+port_B2|
+port_B3|
+port_B4|
+port_B5|
+port_B6|
+port_B7|
+port_C2|
+port_C3|
+port_C4|
+port_C5|
+port_C6|
+port_C7|
+port_D0|
+port_D1|
+port_D2|
+port_D3|
+port_D4|
+port_D5|
+port_D6|
+port_D7 { return textColor(yychar, yylength(), new Color(186, 143, 86)); }
 
 /* Tipos de puertos */
 proximity |
 temperature |
 LED |
-LED_RGB |
 LCD |
 button |
 motor { return textColor(yychar, yylength(), new Color(249, 194, 60)); }
@@ -102,6 +120,7 @@ console { return textColor(yychar, yylength(), new Color(0, 235, 255)); }
 delay { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 operation { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 call { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
+ligther { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 
 /*Funciones Motor*/
 move { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
