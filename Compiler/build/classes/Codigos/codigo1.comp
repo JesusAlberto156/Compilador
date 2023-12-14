@@ -1,18 +1,10 @@
 #Puertos
 
-<<<<<<< HEAD
-port_A1 proximity promitySensor!
-port_A2 motor motor1!
-port_B6 button ButtonIN!
-port_B7 temperature temperatureSensor!
-port_B3 LCD starLCD!
-=======
 port_1 proximity promitySensor!
 port_2 motor motor1!
 port_3 LED_RGB rgbLED!
 port_6 button ButtonIN!
 port_7 temperature temperatureSensor!
->>>>>>> 25feddefdcdd4c4ea11c105a7d3e304e7e38587a
 
 #Declaracion e iniacializacion de variables
 var int number1!
@@ -21,14 +13,6 @@ const string number3!
 var boolean bandera = false!
 bandera = true!
 var string cadena2!
-<<<<<<< HEAD
-
-
-var string holaMundo = 'HolaMundo'!
-number1 = 3 !
-number2 = 3.3 !
-number3 = 'Hola'!
-=======
 
 
 var string holaMundo = 'HolaMundo'!
@@ -36,7 +20,6 @@ var string holaMundo = 'HolaMundo'!
 number1 = 3 !
 number2 = 3.3 !
 number3 = 4!
->>>>>>> 25feddefdcdd4c4ea11c105a7d3e304e7e38587a
 # Todas las variables se deben declarar fuera de los bloques o funciones
 # y antes de uso 
 # Declaracion de funciones
@@ -54,27 +37,19 @@ function int sumaNumerosInt(int a, int b){
 
 #funcion mover motor1
 function moverMotor(){
-<<<<<<< HEAD
-   move(motor1,180,ButtonIN)!
-=======
    move(motor1,180)!
->>>>>>> 25feddefdcdd4c4ea11c105a7d3e304e7e38587a
    print(console,'El motor1 se esta moviendo')!
 }
 
 #funcion detener motor1
 function detenerMotor(){
-   restart(motor1,ButtonIN)!
+   restart(motor1)!
    print(console, 'El motor 1 se detuvo')!
 }
 
 #funcion escribir un numero en la pantalla LCD
 function escribirLCD(){
-<<<<<<< HEAD
-   print(starLCD, 'hola')!
-=======
    print(standarLCD, n)!
->>>>>>> 25feddefdcdd4c4ea11c105a7d3e304e7e38587a
 }
 
 begin{
@@ -94,15 +69,7 @@ loop{
   }
   if(number3 and number2){}
   if(number1 >= number2){}
-<<<<<<< HEAD
-  #number1 = read(temperatureSensor!)
-  number2 = 0.89 !
-  ligther(led1,ButtonIN)!
-  # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados
-}
-=======
    #number1 = read(temperatureSensor!)
   number2 = 0 !
   # El motor solo se movera si el sensor de temperatura sobrepasa los 25 grados
 }
->>>>>>> 25feddefdcdd4c4ea11c105a7d3e304e7e38587a
