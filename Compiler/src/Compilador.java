@@ -882,10 +882,21 @@ public class Compilador extends javax.swing.JFrame {
         Grammar gramatica = new Grammar(tokens, errors);
         
         /* Eliminacion de errores */
-        gramatica.delete("ERROR_X", 0, "----------> Error_X:  Error desconocido, verififque como está escrito el código, Linea [#] Columna [%]");
-        gramatica.delete("ERROR_0", 0, "----------> Error_00:  El carácter no es válido en el lenguaje, Linea [#] Columna [%]");
-        gramatica.delete("ERROR_1", 1, "----------> Error_01:  El carácter comilla no está asociado a una cadena, Linea [#] Columna [%]");
-        gramatica.delete("ERROR_2", 2, "----------> Error_02:  El carácter guión bajo no está asociado a un puerto, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_X", 0, "----------> Error_léxico_X:  Error desconocido, verifique como está escrito el código, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_0", 0, "----------> Error_léxico_0:  El carácter o caracteres no es válido en el lenguaje, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_1", 1, "----------> Error_léxico_1:  Un carácter o caracteres del identificador cadena no pertenece a un símbolo válido, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_2", 2, "----------> Error_léxico_2:  No hay ningún elemento entre ‘ ’, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_3", 3, "----------> Error_léxico_3:  La comilla o comillas no está asociada a un identificador cadena, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_4", 4, "----------> Error_léxico_4:  El carácter o caracteres guion bajo no está asociado a un puerto, o a la palabra reservada turn_off, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_5", 5, "----------> Error_léxico_5:  El número real contiene un carácter o caracteres no validos, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_6", 6, "----------> Error_léxico_6:  El número real inicia con un punto o varios puntos, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_7", 7, "----------> Error_léxico_7:  El número real inicia con un punto o varios puntos y cuenta con un carácter o caracteres no validos, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_8", 8, "----------> Error_léxico_8:  El número real inicia con un punto o varios puntos y tiene más de uno, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_9", 9, "----------> Error_léxico_9:  El número real inicia con un punto o varios puntos, tiene más de uno y cuenta con un carácter o caracteres no validos, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_10", 10, "----------> Error_léxico_10:  El número real tiene más de un punto, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_11", 11, "----------> Error_léxico_11:  El número real tiene más de un punto y cuenta con un carácter o caracteres no validos, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_12", 12, "----------> Error_léxico_12:  El número real no continua después del punto, Linea [#] Columna [%]");
+        gramatica.delete("Error_léxico_13", 13, "----------> Error_léxico_13:  El numero entero contiene un carácter o caracteres no validos, Linea [#] Columna [%]");
         
         /* Agrupación de valores */
         gramatica.group("VALOR_BOOLEANO", "(VALOR_CONDICIONAL_T|VALOR_CONDICIONAL_F)");

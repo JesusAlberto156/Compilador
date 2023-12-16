@@ -47,14 +47,14 @@ Error1 = {Comilla}({Letra}|{Digito}|{CaracterNoValido})({Letra}|{Digito}|{Simbol
 Error2 = {Comilla}{Comilla}|{Comilla}{EspacioEnBlanco}{EspacioEnBlanco}*{Comilla}
 Error3 = {Comilla}({Comilla})*
 Error4 = {GuionBajo}({GuionBajo})*
-Error5 = {Digito}({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*\.({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*
 Error6 = \.({Punto})*({Digito})({Digito})*
 Error7 = \.({Punto})*({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*
 Error8 = \.({Punto})*({Digito})({Digito}|{Punto})*
 Error9 = \.({Punto})*({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra}|{Punto})*
-Error10 = {Digito}+\.({Digito})({Digito}|{Punto})*
-Error11 = {Digito}+\.({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra}|{Punto})*
+Error10 = {Digito}+\.({Punto})*({Digito})({Digito}|{Punto})*
+Error11 = {Digito}+\.({Punto})*({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra}|{Punto})*
 Error12 = {Digito}+\.
+Error5 = {Digito}({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*\.({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*
 Error13 = {Digito}({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*
 
 %%
@@ -189,7 +189,6 @@ else { return token(yytext(), "ESTRUCTURA_DE_CONTROL_5", yyline, yycolumn); }
 {Error2} { return token(yytext(), "Error_léxico_2", yyline, yycolumn); }
 {Error3} { return token(yytext(), "Error_léxico_3", yyline, yycolumn); }
 {Error4} { return token(yytext(), "Error_léxico_4", yyline, yycolumn); }
-{Error5} { return token(yytext(), "Error_léxico_5", yyline, yycolumn); }
 {Error6} { return token(yytext(), "Error_léxico_6", yyline, yycolumn); }
 {Error7} { return token(yytext(), "Error_léxico_7", yyline, yycolumn); }
 {Error8} { return token(yytext(), "Error_léxico_8", yyline, yycolumn); }
@@ -197,6 +196,7 @@ else { return token(yytext(), "ESTRUCTURA_DE_CONTROL_5", yyline, yycolumn); }
 {Error10} { return token(yytext(), "Error_léxico_10", yyline, yycolumn); }
 {Error11} { return token(yytext(), "Error_léxico_11", yyline, yycolumn); }
 {Error12} { return token(yytext(), "Error_léxico_12", yyline, yycolumn); }
+{Error5} { return token(yytext(), "Error_léxico_5", yyline, yycolumn); }
 {Error13} { return token(yytext(), "Error_léxico_13", yyline, yycolumn); }
 
 . { return token(yytext(), "Error_léxico_X", yyline, yycolumn); }
