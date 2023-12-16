@@ -20,6 +20,7 @@ FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 CaracterNoValido = [$¬@%?¡¿"|""/""*"]
 GuionBajo = [_]
 Simbolo = [ .,=()<>#{}+-;:&]
+Simbolo2 = [,=()<>#{}+-:&_]
 Punto = [.]
 Coma = [,]
 Comilla = [']
@@ -38,14 +39,24 @@ NumeroEntero = {Digito}({Digito})*
 /* Número Real */
 NumeroReal = {Digito}+\.({Digito})*
 
-IdentificadorVariable = {Letra}({Letra}|{Digito})*
 IdentificadorCadena = {Comilla}({Letra}|{Digito})({Letra}|{Digito}|{Simbolo})*{Comilla}
 
 /* Errores */
 
 Error0 = {CaracterNoValido}({CaracterNoValido})*
-Error1 = {Comilla}({Comilla})*
-Error2 = {GuionBajo}({GuionBajo})
+Error1 = {Comilla}({Letra}|{Digito}|{CaracterNoValido})({Letra}|{Digito}|{Simbolo}|{CaracterNoValido})*{Comilla}
+Error2 = {Comilla}{Comilla}|{Comilla}{EspacioEnBlanco}{EspacioEnBlanco}*{Comilla}
+Error3 = {Comilla}({Comilla})*
+Error4 = {GuionBajo}({GuionBajo})*
+Error5 = {Digito}({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*\.({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*
+Error6 = \.({Punto})*({Digito})({Digito})*
+Error7 = \.({Punto})*({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*
+Error8 = \.({Punto})*({Digito})({Digito}|{Punto})*
+Error9 = \.({Punto})*({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra}|{Punto})*
+Error10 = {Digito}+\.({Digito})({Digito}|{Punto})*
+Error11 = {Digito}+\.({Digito})({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra}|{Punto})*
+Error12 = {Digito}+\.
+Error13 = {Digito}({Digito}|{CaracterNoValido}|{Simbolo2}|{Letra})*
 
 %%
 
@@ -121,6 +132,7 @@ delay { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 operation { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 call { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 ligther { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
+turn_off { return textColor(yychar, yylength(), new Color(255, 95, 109)); }
 
 /*Funciones Motor*/
 move { return textColor(yychar, yylength(), new Color(106, 210, 161)); }
@@ -143,7 +155,6 @@ else { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
 
 
 {Identificador} { return textColor(yychar, yylength(), new Color(231, 119, 46)); } 
-{IdentificadorVariable} { return textColor(yychar, yylength(), new Color(87, 35, 100)); }
 {IdentificadorCadena} { return textColor(yychar, yylength(), new Color(87, 35, 100)); }
 
 "!" { return textColor(yychar, yylength(), new Color(249, 194, 60)); }
@@ -170,6 +181,17 @@ else { return textColor(yychar, yylength(), new Color(75, 109, 177)); }
 {Error0} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
 {Error1} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
 {Error2} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error3} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error4} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error5} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error6} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error7} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error8} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error9} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error10} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error11} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error12} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
+{Error13} { return textColor(yychar, yylength(), new Color(183, 36, 57)); }
 
 "&" { return textColor(yychar, yylength(), new Color(0, 0, 0)); }
 

@@ -3255,7 +3255,7 @@ public class Compilador extends javax.swing.JFrame {
 
     private void fillTableTokens() {
         tokens.forEach(token -> {
-            if(token.getLexicalComp().equals("ERROR_X") || token.getLexicalComp().equals("ERROR_0") || token.getLexicalComp().equals("ERROR_1") || token.getLexicalComp().equals("ERROR_2")){
+            if(token.getLexicalComp().equals("Error_léxico_X") || token.getLexicalComp().equals("Error_léxico_0") || token.getLexicalComp().equals("Error_léxico_1") || token.getLexicalComp().equals("Error_léxico_2") || token.getLexicalComp().equals("Error_léxico_3") || token.getLexicalComp().equals("Error_léxico_4") || token.getLexicalComp().equals("Error_léxico_5") || token.getLexicalComp().equals("Error_léxico_6") || token.getLexicalComp().equals("Error_léxico_7") || token.getLexicalComp().equals("Error_léxico_8") || token.getLexicalComp().equals("Error_léxico_9") || token.getLexicalComp().equals("Error_léxico_10") || token.getLexicalComp().equals("Error_léxico_11") || token.getLexicalComp().equals("Error_léxico_12") || token.getLexicalComp().equals("Error_léxico_13")){
                 Object[] data = new Object[]{token.getLexicalComp(), token.getLexeme(), "[" + token.getLine() + ", " + token.getColumn() + "]"};
                 Functions.addRowDataInTable(Error.TablaL(), data);
             }else{
