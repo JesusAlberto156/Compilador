@@ -41,6 +41,7 @@ public class Compilador extends javax.swing.JFrame {
     private Tokens T = new Tokens();
     private Errores Error = new Errores();
     private Estructuras E = new Estructuras();
+    private EstructurasConSentido ECS = new EstructurasConSentido();
     private CodigoIntermedio CI = new CodigoIntermedio();
     private Simbolos S = new Simbolos();
     
@@ -250,6 +251,7 @@ public class Compilador extends javax.swing.JFrame {
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem15 = new javax.swing.JMenuItem();
         jMenuItem11 = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenu8 = new javax.swing.JMenu();
@@ -511,6 +513,14 @@ public class Compilador extends javax.swing.JFrame {
             }
         });
         jMenu2.add(jMenuItem9);
+
+        jMenuItem15.setText("Estructuras con sentido");
+        jMenuItem15.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem15ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem15);
 
         jMenuItem11.setText("Tipos de datos");
         jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
@@ -847,6 +857,17 @@ public class Compilador extends javax.swing.JFrame {
         S.setVisible(true);
         S.setLocationRelativeTo(this);
     }//GEN-LAST:event_jMenuItem21ActionPerformed
+
+    private void jMenuItem15ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem15ActionPerformed
+        try{
+            URL ruta = getClass().getResource("/Ayuda/Estructuras con sentido.pdf");
+            String rutaNueva = ruta.getFile();
+            File ruta2 = new File(rutaNueva.replaceAll("%20"," "));
+            Desktop.getDesktop().open(ruta2);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuItem15ActionPerformed
 
     private void compile() {
         clearFields();
@@ -1194,7 +1215,7 @@ public class Compilador extends javax.swing.JFrame {
             
             }
             if(p.lexicalCompRank(0).equals("ESTRUCTURA_DE_CONTROL_2")){
-            
+                E.estructuras().append("ESTRUCTURA_DE_CONTROL SIGNO_AGRUPACION SIGNO_AGRUPACION ----> "+p.lexemeRank(0)+" "+p.lexemeRank(1)+" "+p.lexemeRank(-1)+" ----> ["+p.getLine()+","+p.getColumn()+"]\n\n");
             }
             if(p.lexicalCompRank(0).equals("PALABRA_RESERVADA_2")){
                 E.estructuras().append("PALABRA_RESERVADA SIGNO_AGRUPACION (IDENTIFICADOR | VALORES) SIGNO_AGRUPACION FIN_DE_LINEA ----> "+p.lexemeRank(0)+" "+p.lexemeRank(1)+" "+p.lexemeRank(2)+" "+p.lexemeRank(3)+" "+p.lexemeRank(4)+" ----> ["+p.getLine()+","+p.getColumn()+"]\n\n");
@@ -1206,10 +1227,10 @@ public class Compilador extends javax.swing.JFrame {
                 E.estructuras().append("PALABRA_RESERVADA SIGNO_AGRUPACION IDENTIFICADOR SIGNO_PUNTUACION IDENTIFICADOR SIGNO_AGRUPACION FIN_DE_LINEA ----> "+p.lexemeRank(0)+" "+p.lexemeRank(1)+" "+p.lexemeRank(2)+" "+p.lexemeRank(3)+" "+p.lexemeRank(4)+" "+p.lexemeRank(5)+" "+p.lexemeRank(6)+" ----> ["+p.getLine()+","+p.getColumn()+"]\n\n");
             }
             if(p.lexicalCompRank(0).equals("ESTRUCTURA_DE_CONTROL_4")){
-            
+                
             }
             if(p.lexicalCompRank(0).equals("ESTRUCTURA_DE_CONTROL_3")){
-            
+                E.estructuras().append("ESTRUCTURA_DE_CONTROL SIGNO_AGRUPACION SIGNO_AGRUPACION ----> "+p.lexemeRank(0)+" "+p.lexemeRank(1)+" "+p.lexemeRank(-1)+" ----> ["+p.getLine()+","+p.getColumn()+"]\n\n");
             }
             if(p.lexicalCompRank(0).equals("PALABRA_RESERVADA_4")){
                 if(p.lexicalCompRank(2).equals("OPERADOR_ASIGNACION")){
@@ -1226,589 +1247,525 @@ public class Compilador extends javax.swing.JFrame {
     }
 
     private void semanticAnalysis() {
-        //DECLARACIONES 
-        for(Production p : identProdDP){
-            if(identificadoresC == null){
-                identificadoresC.put(p.lexemeRank(2),"SENSOR");
-                identificadoresV.put(p.lexemeRank(2),p.lexemeRank(1));
-                S.Simbolos().append(p.lexemeRank(2)+" ----> SENSOR ----> "+p.lexemeRank(1)+"\n");
-            }
-            if(identificadoresC.containsKey(p.lexemeRank(2))){
-                errors.add(new ErrorLSSL(125, "----------> Error_125:  La variable ya ha sido declarada, Linea [#] Columna [%]",p, true));
-            }
-            identificadoresC.put(p.lexemeRank(2),"SENSOR");
-            identificadoresV.put(p.lexemeRank(2),p.lexemeRank(1));
-            S.Simbolos().append(p.lexemeRank(2)+" ----> SENSOR ----> "+p.lexemeRank(1)+"\n");
-        }
-        
-        for(Production p : identProdDCV){
-            if(identificadoresC == null){
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+        for(Production p : identProdOrdenado){
+            /*Declaraciones de puerto*/
+            if(p.lexicalCompRank(0).equals("PUERTO_1") || p.lexicalCompRank(0).equals("PUERTO_2") || p.lexicalCompRank(0).equals("PUERTO_3") || p.lexicalCompRank(0).equals("PUERTO_4") || p.lexicalCompRank(0).equals("PUERTO_5") || p.lexicalCompRank(0).equals("PUERTO_6") || p.lexicalCompRank(0).equals("PUERTO_7") || p.lexicalCompRank(0).equals("PUERTO_8") || p.lexicalCompRank(0).equals("PUERTO_9") || p.lexicalCompRank(0).equals("PUERTO_10") || p.lexicalCompRank(0).equals("PUERTO_11") || p.lexicalCompRank(0).equals("PUERTO_12") || p.lexicalCompRank(0).equals("PUERTO_13") || p.lexicalCompRank(0).equals("PUERTO_14") || p.lexicalCompRank(0).equals("PUERTO_15") || p.lexicalCompRank(0).equals("PUERTO_16") || p.lexicalCompRank(0).equals("PUERTO_17") || p.lexicalCompRank(0).equals("PUERTO_18") || p.lexicalCompRank(0).equals("PUERTO_19") || p.lexicalCompRank(0).equals("PUERTO_20") || p.lexicalCompRank(0).equals("PUERTO_21") || p.lexicalCompRank(0).equals("PUERTO_22") || p.lexicalCompRank(0).equals("PUERTO_23") || p.lexicalCompRank(0).equals("PUERTO_24") || p.lexicalCompRank(0).equals("PUERTO_25") || p.lexicalCompRank(0).equals("PUERTO_26") || p.lexicalCompRank(0).equals("PUERTO_27") || p.lexicalCompRank(0).equals("PUERTO_28")){
+                if(identificadoresC == null){
+                    identificadoresC.put(p.lexemeRank(2),"SENSOR");
+                    identificadoresV.put(p.lexemeRank(2),p.lexemeRank(1));
                     identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> "+p.lexemeRank(-2)+"\n");
+                    S.Simbolos().append(p.lexemeRank(2)+" ----> SENSOR ----> "+p.lexemeRank(1)+"\n");
                 }
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> "+p.lexemeRank(-2)+"\n");
-                }
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> "+p.lexemeRank(-2)+"\n");
-                }
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> "+p.lexemeRank(-2)+"\n");
-                }
-                
-            }
-            if(identificadoresC.containsKey(p.lexemeRank(2))){
-                errors.add(new ErrorLSSL(125, "----------> Error_125:  La variable ya ha sido declarada, Linea [#] Columna [%]",p, true));
-            }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
-                if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_ENTERO")){
-                    if(Integer.parseInt(p.lexemeRank(-2)) <= 65535){
-                        identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
-                        identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                if(identificadoresC.containsKey(p.lexemeRank(2))){
+                    errors.add(new ErrorLSSL(0, "----------> Error_semántico_0:  La variable ya ha sido declarada en la declaración de puerto, Linea [#] Columna [%]",p, true));
+                }else{
+                    if(identificadoresT.containsValue(p.lexemeRank(0))){
+                        errors.add(new ErrorLSSL(1, "----------> Error_semántico_1:  El puerto ya está ocupado por un componente electrónico en la declaración de puerto, Linea [#] Columna [%]",p, true));
+                    }else{
+                        identificadoresC.put(p.lexemeRank(2),"SENSOR");
+                        identificadoresV.put(p.lexemeRank(2),p.lexemeRank(1));
                         identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                        S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> "+p.lexemeRank(-2)+"\n");
-                    }else{
-                        errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
+                        S.Simbolos().append(p.lexemeRank(2)+" ----> SENSOR ----> "+p.lexemeRank(1)+"\n");
                     }
-                }else{
-                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
                 }
             }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
-                if(p.lexicalCompRank(-2).equals("VALOR_CADENA")){
-                    if(p.lexemeRank(-2).length() <= 32){
-                        identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
-                        identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
-                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                        S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> "+p.lexemeRank(-2)+"\n");
-                    }else{
-                        errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
+            /*Declaraciones de puerto*/
+            /*Declaraciones*/
+            if(p.lexicalCompRank(0).equals("DECLARACION_1") || p.lexicalCompRank(0).equals("DECLARACION_2")){
+                if(p.lexicalCompRank(3).equals("OPERADOR_ASIGNACION")){
+                    if(identificadoresC == null){
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_1")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+                            identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> "+p.lexemeRank(-2)+"\n");
+                        }
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_2")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+                            identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> "+p.lexemeRank(-2)+"\n");
+                        }
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_3")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+                            identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> "+p.lexemeRank(-2)+"\n");
+                        }
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_4")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEAN");
+                            identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEAN ----> "+p.lexemeRank(-2)+"\n");
+                        }
                     }
-                }else{
-                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
-                }
-            }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
-                if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_REAL")){
-                    if(Double.parseDouble(p.lexemeRank(-2)) <= Float.MAX_VALUE){
-                        identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
-                        identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
-                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                        S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> "+p.lexemeRank(-2)+"\n");
-                    }else{
-                        errors.add(new ErrorLSSL(124, "----------> Error_124:  El valor asignado en la declaración no está en rango, Linea [#] Columna [%]",p, true));
+                    if(identificadoresC.containsKey(p.lexemeRank(2))){
+                        errors.add(new ErrorLSSL(2, "----------> Error_semántico_2:  La variable ya ha sido declarada en la declaración, Linea [#] Columna [%]",p, true));
                     }
-                }else{
-                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
-                }
-            }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
-                if(p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_T") || p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_F")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
-                    identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> "+p.lexemeRank(-2)+"\n");
-                }else{
-                    errors.add(new ErrorLSSL(123, "----------> Error_123:  El tipo de dato no es el mismo que el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
-                }
-            }
-        }
-        
-        for(Production p : identProdDSV){
-            if(identificadoresC == null){
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> Todavia no cuenta con valor\n");
-                }
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> Todavia no cuenta con valor\n");
-                }
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> Todavia no cuenta con valor\n");
-                }
-                if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
-                    identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
-                    identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> Todavia no cuenta con valor\n");
-                }
-            }
-            if(identificadoresC.containsKey(p.lexemeRank(2))){
-                errors.add(new ErrorLSSL(125, "----------> Error_125:  La variable ya ha sido declarada, Linea [#] Columna [%]",p, true));
-            }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_I")){
-                identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
-                identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> Todavia no cuenta con valor\n");
-            }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_S")){
-                identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
-                identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> Todavia no cuenta con valor\n");
-            }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_D")){
-                identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
-                identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> Todavia no cuenta con valor\n");
-            }
-            if(p.lexicalCompRank(1).equals("TIPO_DATO_B")){
-                identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEANO");
-                identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
-                    S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEANO ----> Todavia no cuenta con valor\n");
-            }
-        }
-        //DECLARACIONES 
-        
-        //ASIGNACIONES
-        for(Production p : identProdA){
-            if(identificadoresC.containsKey(p.lexemeRank(0))){
-                if(identificadoresT.containsKey(p.lexemeRank(0)) && identificadoresV.containsKey(p.lexemeRank(0))){
-                    if(identificadoresT.get(p.lexemeRank(0)).equals("const")){
-                        errors.add(new ErrorLSSL(126, "----------> Error_126:  La variable es una constante y no es posible modificar su valor, Linea [#] Columna [%]",p, true));
-                    }else{
-                        if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_ENTERO")){
-                            if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_ENTERO")){
-                                identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_ENTERO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_1")){
+                        if(p.lexicalCompRank(-2).equals("NUMERO_ENTERO")){
+                            if(Integer.parseInt(p.lexemeRank(-2)) <= 65535){
+                                identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+                                identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                                identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                                S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> "+p.lexemeRank(-2)+"\n");
                             }else{
-                                errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
+                                errors.add(new ErrorLSSL(4, "----------> Error_semántico_4:  El valor asignado en la declaración no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(3, "----------> Error_semántico_3:  El tipo de dato de la declaración no corresponde con el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                        }    
+                    }
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_2")){
+                        if(p.lexicalCompRank(-2).equals("IDENTIFICADOR_CADENA")){
+                            if(p.lexemeRank(-2).length() <= 32){
+                                identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+                                identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                                identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                                S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> "+p.lexemeRank(-2)+"\n");
+                            }else{
+                                errors.add(new ErrorLSSL(4, "----------> Error_semántico_4:  El valor asignado en la declaración no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(3, "----------> Error_semántico_3:  El tipo de dato de la declaración no corresponde con el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                        }
+                    }
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_3")){
+                        if(p.lexicalCompRank(-2).equals("NUMERO_REAL")){
+                            if(Double.parseDouble(p.lexemeRank(-2)) <= Float.MAX_VALUE){
+                                identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+                                identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                                identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                                S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> "+p.lexemeRank(-2)+"\n");
+                            }else{
+                                errors.add(new ErrorLSSL(4, "----------> Error_semántico_4:  El valor asignado en la declaración no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(3, "----------> Error_semántico_3:  El tipo de dato de la declaración no corresponde con el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                        }          
+                    }
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_4")){
+                        if(p.lexicalCompRank(-2).equals("CONDICIONAL_1") || p.lexicalCompRank(-2).equals("CONDICIONAL_2")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEAN");
+                            identificadoresV.put(p.lexemeRank(2),p.lexemeRank(-2));
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEAN ----> "+p.lexemeRank(-2)+"\n");
+                        }else{
+                            errors.add(new ErrorLSSL(3, "----------> Error_semántico_3:  El tipo de dato de la declaración no corresponde con el valor asignado en la declaración, Linea [#] Columna [%]",p, true));
+                        }    
+                    }
+                }else{
+                    if(identificadoresC == null){
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_1")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> No tiene valor\n");
+                        }
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_2")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> No tiene valor\n");
+                        }
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_3")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> No tiene valor\n");
+                        }
+                        if(p.lexicalCompRank(1).equals("TIPO_DATO_4")){
+                            identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEAN");
+                            identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEAN ----> No tiene valor\n");
+                        }
+                    }
+                    if(identificadoresC.containsKey(p.lexemeRank(2))){
+                        errors.add(new ErrorLSSL(2, "----------> Error_semántico_2:  La variable ya ha sido declarada en la declaración, Linea [#] Columna [%]",p, true));
+                    }
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_1")){
+                        identificadoresC.put(p.lexemeRank(2),"TIPO_ENTERO");
+                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_ENTERO ----> No tiene valor\n");
+                    }
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_2")){
+                        identificadoresC.put(p.lexemeRank(2),"TIPO_STRING");
+                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_STRING ----> No tiene valor\n");
+                    }
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_3")){
+                        identificadoresC.put(p.lexemeRank(2),"TIPO_DECIMAL");
+                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_DECIMAL ----> No tiene valor\n");
+                    }
+                    if(p.lexicalCompRank(1).equals("TIPO_DATO_4")){
+                        identificadoresC.put(p.lexemeRank(2),"TIPO_BOOLEAN");
+                        identificadoresT.put(p.lexemeRank(2),p.lexemeRank(0));
+                            S.Simbolos().append(p.lexemeRank(2)+" ----> TIPO_BOOLEAN ----> No tiene valor\n");
+                    }
+                }  
+            }
+            /*Declaraciones*/
+            /*Asignaciones*/
+            if(p.lexicalCompRank(0).equals("IDENTIFICADOR")){
+                if(identificadoresC.containsKey(p.lexemeRank(0))){
+                    if(identificadoresV.containsKey(p.lexemeRank(0))){
+                        if(identificadoresT.get(p.lexemeRank(0)).equals("const")){
+                            errors.add(new ErrorLSSL(6, "----------> Error_semántico_6:  La variable es de tipo const en la asignación y no se puede modificar su valor, Linea [#] Columna [%]",p, true));
+                        }else{
+                            if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_ENTERO")){
+                                if(p.lexicalCompRank(-2).equals("NUMERO_ENTERO")){
+                                    if(Integer.parseInt(p.lexemeRank(-2)) <= 65535){
+                                        identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                    }else{
+                                        errors.add(new ErrorLSSL(8, "----------> Error_semántico_8:  El valor asignado en la asignación no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                                    }
+                                }else{
+                                    errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_STRING")){
+                                if(p.lexicalCompRank(-2).equals("IDENTIFICADOR_CADENA")){
+                                    if(p.lexemeRank(-2).length() <= 32){
+                                        identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                    }else{
+                                        errors.add(new ErrorLSSL(8, "----------> Error_semántico_8:  El valor asignado en la asignación no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                                    }
+                                }else{
+                                    errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_DECIMAL")){
+                                if(p.lexicalCompRank(-2).equals("NUMERO_REAL")){
+                                    if(Double.parseDouble(p.lexemeRank(-2)) <= Float.MAX_VALUE){
+                                        identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                    }else{
+                                        errors.add(new ErrorLSSL(8, "----------> Error_semántico_8:  El valor asignado en la asignación no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                                    }
+                                }else{
+                                    errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_BOOLEAN")){
+                                if(p.lexicalCompRank(-2).equals("CONDICIONAL_1") || p.lexicalCompRank(-2).equals("CONDICIONAL_2")){
+                                    identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                }else{
+                                    errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
+                                }
                             }
                         }
-                        if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_DECIMAL")){
-                            if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_REAL")){
-                                identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_DECIMAL ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
+                    }else{
+                        if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_ENTERO")){
+                            if(p.lexicalCompRank(-2).equals("NUMERO_ENTERO")){
+                                if(Integer.parseInt(p.lexemeRank(-2)) <= 65535){
+                                    identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                }else{
+                                    errors.add(new ErrorLSSL(8, "----------> Error_semántico_8:  El valor asignado en la asignación no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                                }
                             }else{
-                                errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
+                                errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
                             }
                         }
                         if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_STRING")){
-                            if(p.lexicalCompRank(-2).equals("VALOR_CADENA")){
-                                identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_STRING ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
-                            }else{
-                                errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
-                            }
-                        }
-                        if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_BOOLEANO")){
-                            if(p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_T") || p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_F")){
-                                identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                                S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_BOOLEANO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
-                            }else{
-                                errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
-                            }
-                        }
-                    }
-                }else{
-                    if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_ENTERO")){
-                        if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_ENTERO")){
-                            identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_ENTERO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
-                        }else{
-                            errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
-                        }
-                    }
-                    if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_DECIMAL")){
-                        if(p.lexicalCompRank(-2).equals("VALOR_NUMERO_REAL")){
-                            identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_DECIMAL ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
-                        }else{
-                            errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
-                        }
-                    }
-                    if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_STRING")){
-                        if(p.lexicalCompRank(-2).equals("VALOR_CADENA")){
-                            identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_STRING ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
-                        }else{
-                            errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
-                        }
-                    }
-                    if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_BOOLEANO")){
-                        if(p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_T") || p.lexicalCompRank(-2).equals("VALOR_CONDICIONAL_F")){
-                            identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
-                            S.Simbolos().append(p.lexemeRank(0)+" ----> TIPO_BOOLEANO ----> Nuevo Valor - "+p.lexemeRank(-2)+"\n");
-                        }else{
-                            errors.add(new ErrorLSSL(128, "----------> Error_128:  El tipo de dato del valor no es el mismo que el de la variable a asignar, Linea [#] Columna [%]",p, true));
-                        }
-                    }
-                }
-            }else{
-                errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
-            }
-        }
-        //ASIGNACIONES
-        
-        //MOTORES
-        for(Production p : identProdFMCV){
-            if(identificadoresC.containsKey(p.lexemeRank(2))){
-                if(identificadoresV.get(p.lexemeRank(2)).equals("motor")){
-                    if(p.lexemeRank(0).equals("move")){
-                        if(p.lexicalCompRank(-5).equals("VALOR_NUMERO_ENTERO")){
-                        
-                        }else{
-                            errors.add(new ErrorLSSL(132, "----------> Error_132:  La función del motor move tiene un valor diferente de tipo entero, Linea [#] Columna [%]",p, true));
-                        }
-                    }else{
-                        errors.add(new ErrorLSSL(131, "----------> Error_131:  La función del motor start o restart tiene valor, Linea [#] Columna [%]",p, true));
-                    }
-                }else{
-                    errors.add(new ErrorLSSL(129, "----------> Error_129:  La variable no está asociado a un sensor de tipo motor, Linea [#] Columna [%]",p, true));
-                }
-            }else{
-                errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
-            }    
-        }
-        for(Production p : identProdFMSV){
-            if(identificadoresC.containsKey(p.lexemeRank(2))){
-                if(identificadoresV.get(p.lexemeRank(2)).equals("motor")){
-                    if(p.lexemeRank(0).equals("move")){
-                        errors.add(new ErrorLSSL(130, "----------> Error_130:  La función del motor move no tiene valor, Linea [#] Columna [%]",p, true));
-                    }else{
-                        
-                    }
-                }else{
-                    errors.add(new ErrorLSSL(129, "----------> Error_129:  La variable no está asociado a un sensor de tipo motor, Linea [#] Columna [%]",p, true));
-                }
-            }else{
-                errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
-            }
-        }
-        //MOTORES
-        
-        //IMPRESORA
-        for(Production p : identProdMIC){
-            if(p.lexicalCompRank(-3).equals("IDENTIFICADOR")){
-                if(identificadoresC.containsKey(p.lexemeRank(-3))){
-                    if(identificadoresC.get(p.lexemeRank(-3)).equals("TIPO_STRING")){
-                        if(identificadoresV.containsKey(p.lexemeRank(-3))){
-                        
-                        }else{
-                            errors.add(new ErrorLSSL(161, "----------> Error_161:  La variable no tiene valor asignado, Linea [#] Columna [%]",p, true));
-                        }
-                    }else{
-                        errors.add(new ErrorLSSL(134, "----------> Error_134:  En el método de la impresora el valor de la variable no es de tipo string, Linea [#] Columna [%]",p, true));
-                    }
-                }else{
-                    errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
-                }
-            }else{
-                if(p.lexicalCompRank(-3).equals("VALOR_CADENA")){
-                
-                }else{
-                    errors.add(new ErrorLSSL(133, "----------> Error_133:  En el método impresora el valor no es de tipo string, Linea [#] Columna [%]",p, true));
-                }
-            }
-        }
-        for(Production p : identProdMIL){
-            if(p.lexicalCompRank(-3).equals("IDENTIFICADOR")){
-                if(identificadoresC.containsKey(p.lexemeRank(-3))){
-                    if(identificadoresC.get(p.lexemeRank(-3)).equals("TIPO_STRING")){
-                        if(identificadoresV.containsKey(p.lexemeRank(-3))){
-                            if(identificadoresC.containsKey(p.lexemeRank(2))){
-                                if(identificadoresV.get(p.lexemeRank(2)).equals("LCD")){
-
+                            if(p.lexicalCompRank(-2).equals("IDENTIFICADOR_CADENA")){
+                                if(p.lexemeRank(-2).length() <= 32){
+                                    identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
                                 }else{
-                                    errors.add(new ErrorLSSL(135, "----------> Error_135:  En el método de la impresora la variable no está asociada a un sensor de tipo LCD, Linea [#] Columna [%]",p, true));
+                                    errors.add(new ErrorLSSL(8, "----------> Error_semántico_8:  El valor asignado en la asignación no se encuentra en rango, Linea [#] Columna [%]",p, true));
                                 }
                             }else{
-                                errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                                errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
                             }
-                        }else{
-                            errors.add(new ErrorLSSL(161, "----------> Error_161:  La variable no tiene valor asignado, Linea [#] Columna [%]",p, true));
                         }
-                                                    
-                    }else{
-                        errors.add(new ErrorLSSL(134, "----------> Error_134:  En el método de la impresora el valor de la variable no es de tipo string, Linea [#] Columna [%]",p, true));
+                        if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_DECIMAL")){
+                            if(p.lexicalCompRank(-2).equals("NUMERO_REAL")){
+                                if(Double.parseDouble(p.lexemeRank(-2)) <= Float.MAX_VALUE){
+                                    identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                                }else{
+                                    errors.add(new ErrorLSSL(8, "----------> Error_semántico_8:  El valor asignado en la asignación no se encuentra en rango, Linea [#] Columna [%]",p, true));
+                                }
+                            }else{
+                                errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
+                            }
+                        }
+                        if(identificadoresC.get(p.lexemeRank(0)).equals("TIPO_BOOLEAN")){
+                            if(p.lexicalCompRank(-2).equals("CONDICIONAL_1") || p.lexicalCompRank(-2).equals("CONDICIONAL_2")){
+                                identificadoresV.put(p.lexemeRank(0),p.lexemeRank(-2));
+                            }else{
+                                errors.add(new ErrorLSSL(7, "----------> Error_semántico_7:  El tipo de dato de la variable no corresponde con el valor asignado en la asignación, Linea [#] Columna [%]",p, true));
+                            }
+                        }
                     }
                 }else{
-                    errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                    errors.add(new ErrorLSSL(5, "----------> Error_semántico_5:  La variable no ha sido declarada en la asignación, Linea [#] Columna [%]",p, true));
                 }
-            }else{
-                if(p.lexicalCompRank(-3).equals("VALOR_CADENA")){
+            }
+            /*Asignaciones*/
+            /*Funcion motor*/
+            if(p.lexicalCompRank(0).equals("MOTOR_1") || p.lexicalCompRank(0).equals("MOTOR_2") || p.lexicalCompRank(0).equals("MOTOR_3")){
+                if(p.lexicalCompRank(4).equals("IDENTIFICADOR")){
+                    if(p.lexemeRank(0).equals("move")){
+                        errors.add(new ErrorLSSL(11, "----------> Error_semántico_11:  La función del motor move no tiene un valor, Linea [#] Columna [%]",p, true));
+                    }else{
+                        if(identificadoresC.containsKey(p.lexemeRank(2))){
+                            if(identificadoresV.get(p.lexemeRank(2)).equals("motor")){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(9, "----------> Error_semántico_9:  La variable 1 no está asociada a un componente electrónico de tipo motor en la función del motor, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(15, "----------> Error_semántico_15:  La variable 1 no ha sido declarada en la función del motor, Linea [#] Columna [%]",p, true));
+                        }
+                        if(identificadoresC.containsKey(p.lexemeRank(4))){
+                            if(identificadoresV.get(p.lexemeRank(4)).equals("button")){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(10, "----------> Error_semántico_10:  La variable 2 no está asociada a un componente electrónico de tipo button en la función del motor, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(16, "----------> Error_semántico_16:  La variable 2 no ha sido declarada en la función del motor, Linea [#] Columna [%]",p, true));
+                        }
+                    }
+                }else{
+                    if(p.lexemeRank(0).equals("start") || p.lexemeRank(0).equals("restart")){
+                        errors.add(new ErrorLSSL(14, "----------> Error_semántico_14:  La función del motor start o restart tiene un valor, Linea [#] Columna [%]",p, true));
+                    }else{
+                        if(identificadoresC.containsKey(p.lexemeRank(2))){
+                            if(identificadoresV.get(p.lexemeRank(2)).equals("motor")){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(9, "----------> Error_semántico_9:  La variable 1 no está asociada a un componente electrónico de tipo motor en la función del motor, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(15, "----------> Error_semántico_15:  La variable 1 no ha sido declarada en la función del motor, Linea [#] Columna [%]",p, true));
+                        }
+                        if(p.lexicalCompRank(4).equals("NUMERO_ENTERO")){
+                            if(Integer.parseInt(p.lexemeRank(4)) == 180){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(13, "----------> Error_semántico_13:  El valor aceptable es 180 en la función del motor, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(12, "----------> Error_semántico_12:  El valor no es de tipo entero en la función del motor, Linea [#] Columna [%]",p, true));
+                        }
+                        if(identificadoresC.containsKey(p.lexemeRank(6))){
+                            if(identificadoresV.get(p.lexemeRank(6)).equals("button")){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(10, "----------> Error_semántico_10:  La variable 2 no está asociada a un componente electrónico de tipo button en la función del motor, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(16, "----------> Error_semántico_16:  La variable 2 no ha sido declarada en la función del motor, Linea [#] Columna [%]",p, true));
+                        }
+                    }
+                }
+            }
+            /*Funcion motor*/
+            /*Metodo impresora*/
+            if(p.lexicalCompRank(0).equals("PALABRA_RESERVADA_6")){
+                if(p.lexicalCompRank(2).equals("IDENTIFICADOR")){
                     if(identificadoresC.containsKey(p.lexemeRank(2))){
-                        if(identificadoresV.get(p.lexemeRank(2)).equals("LCD")){
-                        
+                        if(identificadoresC.get(p.lexemeRank(2)).equals("SENSOR")){
+                            if(identificadoresV.get(p.lexemeRank(2)).equals("LCD")){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(21, "----------> Error_semántico_21:  La variable 1 no está asociado a un componente electrónico de tipo LCD  en el método de la impresora, Linea [#] Columna [%]",p, true));
+                            }
                         }else{
-                            errors.add(new ErrorLSSL(135, "----------> Error_135:  En el método de la impresora la variable no está asociada a un sensor de tipo LCD, Linea [#] Columna [%]",p, true));
+                            errors.add(new ErrorLSSL(21, "----------> Error_semántico_21:  La variable 1 no está asociado a un componente electrónico de tipo LCD  en el método de la impresora, Linea [#] Columna [%]",p, true));
                         }
                     }else{
-                        errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                        errors.add(new ErrorLSSL(22, "----------> Error_semántico_22:  La variable 1 no ha sido declarada en el método de la impresora, Linea [#] Columna [%]",p, true));
+                    }
+                    if(p.lexicalCompRank(4).equals("IDENTIFICADOR")){
+                        if(identificadoresC.containsKey(p.lexemeRank(4))){
+                            if(identificadoresC.get(p.lexemeRank(4)).equals("TIPO_STRING")){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(23, "----------> Error_semántico_23:  La variable 2 no es de tipo de dato string en el método de la impresora, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(24, "----------> Error_semántico_24:  La variable 2 no ha sido declarada en el método de la impresora, Linea [#] Columna [%]",p, true));
+                        }
+                    }else{
+                        if(p.lexicalCompRank(4).equals("IDENTIFICADOR_CADENA")){
+                            if(p.lexemeRank(4).length() <= 32){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(18, "----------> Error_semántico_18:  El valor no se encuentra en rango en el método de la impresora, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(17, "----------> Error_semántico_17:  El valor no es de tipo de dato string en el método de la impresora, Linea [#] Columna [%]",p, true));
+                        }
                     }
                 }else{
-                    errors.add(new ErrorLSSL(133, "----------> Error_133:  En el método impresora el valor no es de tipo string, Linea [#] Columna [%]",p, true));
+                    if(p.lexicalCompRank(4).equals("IDENTIFICADOR")){
+                        if(identificadoresC.containsKey(p.lexemeRank(4))){
+                            if(identificadoresC.get(p.lexemeRank(4)).equals("TIPO_STRING")){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(19, "----------> Error_semántico_19:  La variable no es de tipo de dato string en el método de la impresora, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(20, "----------> Error_semántico_20:  La variable no ha sido declarada en el método de la impresora, Linea [#] Columna [%]",p, true));
+                        }
+                    }else{
+                        if(p.lexicalCompRank(4).equals("IDENTIFICADOR_CADENA")){
+                            if(p.lexemeRank(4).length() <= 32){
+                            
+                            }else{
+                                errors.add(new ErrorLSSL(18, "----------> Error_semántico_18:  El valor no se encuentra en rango en el método de la impresora, Linea [#] Columna [%]",p, true));
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(17, "----------> Error_semántico_17:  El valor no es de tipo de dato string en el método de la impresora, Linea [#] Columna [%]",p, true));
+                        }
+                    }
                 }
             }
-        }
-        //IMPRESORA
-        
-        //SENSORES
-        for(Production p : identProdMS){
-            if(identificadoresC.containsKey(p.lexemeRank(1))){
-                if(identificadoresT.containsKey(p.lexemeRank(1)) && identificadoresV.containsKey(p.lexemeRank(1))){
-                    if(identificadoresT.get(p.lexemeRank(1)).equals("const")){
-                        errors.add(new ErrorLSSL(126, "----------> Error_126:  La variable es una constante y no es posible modificar su valor, Linea [#] Columna [%]",p, true));
-                    }else{
+            /*Metodo impresora*/
+            /*Metodo sensor*/
+            if(p.lexicalCompRank(0).equals("PALABRA_RESERVADA_4")){
+                if(p.lexicalCompRank(2).equals("OPERADOR_ASIGNACION")){
+                    if(identificadoresC.containsKey(p.lexemeRank(1))){
                         if(identificadoresC.get(p.lexemeRank(1)).equals("TIPO_STRING")){
-                            if(identificadoresC.containsKey(p.lexemeRank(3))){
-                                if(identificadoresC.get(p.lexemeRank(3)).equals("SENSOR")){
-                                    if(identificadoresV.get(p.lexemeRank(3)).equals("proximity")){
-                                        if(p.lexemeRank(5).equals("distance") || p.lexemeRank(5).equals("time")){
-                                        
-                                        }else{
-                                            errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                        }
-                                    }
-                                    if(identificadoresV.get(p.lexemeRank(3)).equals("temperature")){
-                                        if(p.lexemeRank(5).equals("degree")){
-                                        
-                                        }else{
-                                            errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                        }
-                                    }
-                                    if(identificadoresV.get(p.lexemeRank(3)).equals("LED")){
-                                        if(p.lexemeRank(5).equals("state")){
-                                        
-                                        }else{
-                                            errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                        }
-                                    }
-                                    if(identificadoresV.get(p.lexemeRank(3)).equals("LED_RGB")){
-                                        if(p.lexemeRank(5).equals("state")){
-                                        
-                                        }else{
-                                            errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                        }
-                                    }
-                                    if(identificadoresV.get(p.lexemeRank(3)).equals("LCD")){
-                                        if(p.lexemeRank(5).equals("state")){
-                                        
-                                        }else{
-                                            errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                        }
-                                    }
-                                    if(identificadoresV.get(p.lexemeRank(3)).equals("button")){
-                                        if(p.lexemeRank(5).equals("state")){
-                                        
-                                        }else{
-                                            errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                        }
-                                    }
-                                    if(identificadoresV.get(p.lexemeRank(3)).equals("motor")){
-                                        if(p.lexemeRank(5).equals("state")){
-                                        
-                                        }else{
-                                            errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                        }
-                                    }
+                            if(identificadoresV.containsKey(p.lexemeRank(1))){
+                                if(identificadoresT.get(p.lexemeRank(1)).equals("const")){
+                                    errors.add(new ErrorLSSL(27, "----------> Error_semántico_27:  La variable 1 es de tipo const y no es posible modificar su valor en el método del sensor, Linea [#] Columna [%]",p, true));
                                 }else{
-                                    errors.add(new ErrorLSSL(145, "----------> Error_145:  La variable no está asociada a un tipo de sensor, Linea [#] Columna [%]",p, true));
+                                    identificadoresV.put(p.lexemeRank(1), "El dato que solicito por un metodo de sensor");
                                 }
                             }else{
-                                errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                                identificadoresV.put(p.lexemeRank(1), "El dato que solicito por un metodo de sensor");
                             }
                         }else{
-                            errors.add(new ErrorLSSL(144, "----------> Error_144:  La variable no es tipo cadena, Linea [#] Columna [%]",p, true));
-                        }
-                    }
-                }else{
-                    if(identificadoresC.get(p.lexemeRank(1)).equals("TIPO_STRING")){
-                        if(identificadoresC.containsKey(p.lexemeRank(3))){
-                            if(identificadoresC.get(p.lexemeRank(3)).equals("SENSOR")){
-                                if(identificadoresV.get(p.lexemeRank(3)).equals("proximity")){
-                                    if(p.lexemeRank(5).equals("distance") || p.lexemeRank(5).equals("time")){
-
-                                    }else{
-                                        errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                    }
-                                }
-                                if(identificadoresV.get(p.lexemeRank(3)).equals("temperature")){
-                                    if(p.lexemeRank(5).equals("degree")){
-
-                                    }else{
-                                        errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                    }
-                                }
-                                if(identificadoresV.get(p.lexemeRank(3)).equals("LED")){
-                                    if(p.lexemeRank(5).equals("state")){
-
-                                    }else{
-                                        errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                    }
-                                }
-                                if(identificadoresV.get(p.lexemeRank(3)).equals("LED_RGB")){
-                                    if(p.lexemeRank(5).equals("state")){
-
-                                    }else{
-                                        errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                    }
-                                }
-                                if(identificadoresV.get(p.lexemeRank(3)).equals("LCD")){
-                                    if(p.lexemeRank(5).equals("state")){
-
-                                    }else{
-                                        errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                    }
-                                }
-                                if(identificadoresV.get(p.lexemeRank(3)).equals("button")){
-                                    if(p.lexemeRank(5).equals("state")){
-
-                                    }else{
-                                        errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                    }
-                                }
-                                if(identificadoresV.get(p.lexemeRank(3)).equals("motor")){
-                                    if(p.lexemeRank(5).equals("state")){
-
-                                    }else{
-                                        errors.add(new ErrorLSSL(146, "----------> Error_146:  El método del sensor es indefinido al sensor, Linea [#] Columna [%]",p, true));
-                                    }
-                                }
-                            }else{
-                                errors.add(new ErrorLSSL(145, "----------> Error_145:  La variable no está asociada a un tipo de sensor, Linea [#] Columna [%]",p, true));
-                            }
-                        }else{
-                            errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                            errors.add(new ErrorLSSL(25, "----------> Error_semántico_25:  La variable 1 no es de tipo de dato string en el método del sensor, Linea [#] Columna [%]",p, true));
                         }
                     }else{
-                        errors.add(new ErrorLSSL(144, "----------> Error_144:  La variable no es tipo cadena, Linea [#] Columna [%]",p, true));
+                        errors.add(new ErrorLSSL(26, "----------> Error_semántico_26:  La variable 1 no ha sido declarada en el método del sensor, Linea [#] Columna [%]",p, true));
+                    }
+                    if(identificadoresC.containsKey(p.lexemeRank(3))){
+                        if(identificadoresC.get(p.lexemeRank(3)).equals("SENSOR")){
+                            if(identificadoresV.get(p.lexemeRank(3)).equals("proximity")){
+                                if(p.lexemeRank(5).equals("distance") || p.lexemeRank(5).equals("state") || p.lexemeRank(5).equals("time")){
+                                
+                                }else{
+                                    errors.add(new ErrorLSSL(30, "----------> Error_semántico_30:  El método del sensor no es el adecuado al componente electrónico en el método del sensor, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresV.get(p.lexemeRank(3)).equals("temperature")){
+                                if(p.lexemeRank(5).equals("degree")){
+                                
+                                }else{
+                                    errors.add(new ErrorLSSL(30, "----------> Error_semántico_30:  El método del sensor no es el adecuado al componente electrónico en el método del sensor, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresV.get(p.lexemeRank(3)).equals("LED")){
+                                if(p.lexemeRank(5).equals("state")){
+                                
+                                }else{
+                                    errors.add(new ErrorLSSL(30, "----------> Error_semántico_30:  El método del sensor no es el adecuado al componente electrónico en el método del sensor, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresV.get(p.lexemeRank(3)).equals("LCD")){
+                                if(p.lexemeRank(5).equals("state")){
+                                
+                                }else{
+                                    errors.add(new ErrorLSSL(30, "----------> Error_semántico_30:  El método del sensor no es el adecuado al componente electrónico en el método del sensor, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresV.get(p.lexemeRank(3)).equals("button")){
+                                if(p.lexemeRank(5).equals("state")){
+                                
+                                }else{
+                                    errors.add(new ErrorLSSL(30, "----------> Error_semántico_30:  El método del sensor no es el adecuado al componente electrónico en el método del sensor, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                            if(identificadoresV.get(p.lexemeRank(3)).equals("motor")){
+                                if(p.lexemeRank(5).equals("distance") || p.lexemeRank(5).equals("state")){
+                                
+                                }else{
+                                    errors.add(new ErrorLSSL(30, "----------> Error_semántico_30:  El método del sensor no es el adecuado al componente electrónico en el método del sensor, Linea [#] Columna [%]",p, true));
+                                }
+                            }
+                        }else{
+                            errors.add(new ErrorLSSL(28, "----------> Error_semántico_28:  La variable 2 no está asociado a un componente electrónico en el método del sensor, Linea [#] Columna [%]",p, true));
+                        }
+                    }else{
+                        errors.add(new ErrorLSSL(29, "----------> Error_semántico_29:  La variable 2 no ha sido declarada en el método del sensor, Linea [#] Columna [%]",p, true));
                     }
                 }
-            }else{
-                errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
             }
-        }
-        //SENSORES
-        
-        //DELAY
-        for(Production p : identProdMD){
-            if(p.lexicalCompRank(2).equals("IDENTIFICADOR")){
-                if(identificadoresC.containsKey(p.lexemeRank(2))){
-                    if(identificadoresC.get(p.lexemeRank(2)).equals("TIPO_ENTERO")){
-                        if(identificadoresV.containsKey(p.lexemeRank(2))){
+            /*Metodo sensor*/
+            /*Metodo delay*/
+            if(p.lexemeRank(0).equals("delay")){
+                if(p.lexicalCompRank(2).equals("IDENTIFICADOR")){
+                    if(identificadoresC.containsKey(p.lexemeRank(2))){
+                        if(identificadoresC.get(p.lexemeRank(2)).equals("TIPO_ENTERO")){
                         
                         }else{
-                            errors.add(new ErrorLSSL(161, "----------> Error_161:  La variable no tiene valor asignado, Linea [#] Columna [%]",p, true));
+                            errors.add(new ErrorLSSL(31, "----------> Error_semántico_31:  La variable no es de tipo de dato int en el método delay, Linea [#] Columna [%]",p, true));
                         }
                     }else{
-                        errors.add(new ErrorLSSL(147, "----------> Error_147:  El valor de la variable no es de tipo de dato entero, Linea [#] Columna [%]",p, true));
+                        errors.add(new ErrorLSSL(32, "----------> Error_semántico_32:  La variable no ha sido declarada en el método delay, Linea [#] Columna [%]",p, true));
                     }
                 }else{
-                    errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                    if(p.lexicalCompRank(2).equals("NUMERO_ENTERO")){
+                        if(Integer.parseInt(p.lexemeRank(2)) <= 65535){
+                            
+                        }else{
+                            errors.add(new ErrorLSSL(34, "----------> Error_semántico_34:  El valor no se encuentra en rango en el método delay, Linea [#] Columna [%]",p, true));
+                        }
+                    }else{
+                        errors.add(new ErrorLSSL(33, "----------> Error_semántico_33:  El valor no es de tipo de dato int en el método delay, Linea [#] Columna [%]",p, true));
+                    }
                 }
-            }else{
-                if(p.lexicalCompRank(2).equals("VALOR_NUMERO_ENTERO")){
+            }
+            /*Metodo delay*/
+            /*Metodo encender*/
+            if(p.lexemeRank(0).equals("ligther")){
+                if(identificadoresC.containsKey(p.lexemeRank(2))){
+                    if(identificadoresV.get(p.lexemeRank(2)).equals("LED")){
                     
-                }else{
-                    errors.add(new ErrorLSSL(148, "----------> Error_148:  El valor no es de tipo de dato entero, Linea [#] Columna [%]",p, true));
-                }
-            }
-        }
-        //DELAY
-        
-        //IF
-        for(Production p : identProdIR){
-            if(p.lexicalCompRank(2).equals("IDENTIFICADOR")){
-                if(identificadoresC.containsKey(p.lexemeRank(2))){
-                    if(identificadoresC.get(p.lexemeRank(2)).equals("TIPO_ENTERO") || identificadoresC.get(p.lexemeRank(2)).equals("TIPO_DECIMAL")){
-                        if(identificadoresV.containsKey(p.lexemeRank(2))){
-                        
-                        }else{
-                            errors.add(new ErrorLSSL(161, "----------> Error_161:  La variable no tiene valor asignado, Linea [#] Columna [%]",p, true));
-                        }
                     }else{
-                        errors.add(new ErrorLSSL(151, "----------> Error_151:  El valor de la variable 1 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
+                        errors.add(new ErrorLSSL(35, "----------> Error_semántico_35:  La variable 1 no está asociado a un componente electrónico de tipo LED en el método encender, Linea [#] Columna [%]",p, true));
                     }
                 }else{
-                    errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                    errors.add(new ErrorLSSL(36, "----------> Error_semántico_36:  La variable 1 no ha sido declarada en el método encender, Linea [#] Columna [%]",p, true));
                 }
-            }else{
-                if(p.lexicalCompRank(2).equals("VALOR_NUMERO_ENTERO") || p.lexicalCompRank(2).equals("VALOR_NUMERO_REAL")){
-
-                }else{
-                    errors.add(new ErrorLSSL(149, "----------> Error_149:  El valor 1 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
-                }
-            }
-            if(p.lexicalCompRank(4).equals("IDENTIFICADOR")){
                 if(identificadoresC.containsKey(p.lexemeRank(4))){
-                    if(identificadoresC.get(p.lexemeRank(4)).equals("TIPO_ENTERO") || identificadoresC.get(p.lexemeRank(4)).equals("TIPO_DECIMAL")){
-                        if(identificadoresV.containsKey(p.lexemeRank(4))){
-                        
-                        }else{
-                            errors.add(new ErrorLSSL(161, "----------> Error_161:  La variable no tiene valor asignado, Linea [#] Columna [%]",p, true));
-                        }
+                    if(identificadoresV.get(p.lexemeRank(4)).equals("button")){
+                    
                     }else{
-                        errors.add(new ErrorLSSL(152, "----------> Error_152:  El valor de la variable 2 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
+                        errors.add(new ErrorLSSL(37, "----------> Error_semántico_37:  La variable 2 no está asociado a un componente electrónico de tipo button en el método encender, Linea [#] Columna [%]",p, true));
                     }
                 }else{
-                    errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
-                }
-            }else{
-                if(p.lexicalCompRank(4).equals("VALOR_NUMERO_ENTERO") || p.lexicalCompRank(4).equals("VALOR_NUMERO_REAL")){
-
-                }else{
-                    errors.add(new ErrorLSSL(149, "----------> Error_149:  El valor 2 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
+                    errors.add(new ErrorLSSL(38, "----------> Error_semántico_38:  La variable 2 no ha sido declarada en el método encender, Linea [#] Columna [%]",p, true));
                 }
             }
-        }
-        for(Production p : identProdER){
-            if(p.lexicalCompRank(2).equals("IDENTIFICADOR")){
+            /*Metodo encender*/
+            /*Metodo apagar*/
+            if(p.lexemeRank(0).equals("turn_off")){
                 if(identificadoresC.containsKey(p.lexemeRank(2))){
-                    if(identificadoresC.get(p.lexemeRank(2)).equals("TIPO_ENTERO") || identificadoresC.get(p.lexemeRank(2)).equals("TIPO_DECIMAL")){
-                        if(identificadoresV.containsKey(p.lexemeRank(2))){
-                        
-                        }else{
-                            errors.add(new ErrorLSSL(161, "----------> Error_161:  La variable no tiene valor asignado, Linea [#] Columna [%]",p, true));
-                        }
+                    if(identificadoresV.get(p.lexemeRank(2)).equals("LED")){
+                    
                     }else{
-                        errors.add(new ErrorLSSL(151, "----------> Error_151:  El valor de la variable 1 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
+                        errors.add(new ErrorLSSL(39, "----------> Error_semántico_39:  La variable 1 no está asociado a un componente electrónico de tipo LED en el método apagar, Linea [#] Columna [%]",p, true));
                     }
                 }else{
-                    errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
+                    errors.add(new ErrorLSSL(40, "----------> Error_semántico_40:  La variable 1 no ha sido declarada en el método apagar, Linea [#] Columna [%]",p, true));
                 }
-            }else{
-                if(p.lexicalCompRank(2).equals("VALOR_NUMERO_ENTERO") || p.lexicalCompRank(2).equals("VALOR_NUMERO_REAL")){
-
-                }else{
-                    errors.add(new ErrorLSSL(149, "----------> Error_149:  El valor 1 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
-                }
-            }
-            if(p.lexicalCompRank(4).equals("IDENTIFICADOR")){
                 if(identificadoresC.containsKey(p.lexemeRank(4))){
-                    if(identificadoresC.get(p.lexemeRank(4)).equals("TIPO_ENTERO") || identificadoresC.get(p.lexemeRank(4)).equals("TIPO_DECIMAL")){
-                        if(identificadoresV.containsKey(p.lexemeRank(4))){
-                        
-                        }else{
-                            errors.add(new ErrorLSSL(161, "----------> Error_161:  La variable no tiene valor asignado, Linea [#] Columna [%]",p, true));
-                        }
+                    if(identificadoresV.get(p.lexemeRank(4)).equals("button")){
+                    
                     }else{
-                        errors.add(new ErrorLSSL(152, "----------> Error_152:  El valor de la variable 2 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
+                        errors.add(new ErrorLSSL(41, "----------> Error_semántico_41:  La variable 2 no está asociado a un componente electrónico de tipo button en el método apagar, Linea [#] Columna [%]",p, true));
                     }
                 }else{
-                    errors.add(new ErrorLSSL(127, "----------> Error_127:  La variable no ha sido declarada, Linea [#] Columna [%]",p, true));
-                }
-            }else{
-                if(p.lexicalCompRank(4).equals("VALOR_NUMERO_ENTERO") || p.lexicalCompRank(4).equals("VALOR_NUMERO_REAL")){
-
-                }else{
-                    errors.add(new ErrorLSSL(149, "----------> Error_149:  El valor 2 de la condición no es de tipo entero o decimal, Linea [#] Columna [%]",p, true));
+                    errors.add(new ErrorLSSL(42, "----------> Error_semántico_42:  La variable 2 no ha sido declarada en el método apagar, Linea [#] Columna [%]",p, true));
                 }
             }
-        }
-        
-        //IF
+            /*Metodo apagar*/
+            /*If*/
+            
+            /*If*/
+        }       
         
         System.out.print(identificadoresC);
         System.out.print(identificadoresV);
@@ -1909,6 +1866,7 @@ public class Compilador extends javax.swing.JFrame {
         Functions.clearDataInTable(T.tokens());
         Functions.clearDataInTable(Error.TablaL());
         E.estructuras().setText("");
+        ECS.estructuras().setText("");
         CI.cuadruplos().setText("Num --> Operador --> Operando 1 --> Operando 2 --> Resultado\n");
         S.Simbolos().setText("");
     }
@@ -2128,6 +2086,7 @@ public class Compilador extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem13;
     private javax.swing.JMenuItem jMenuItem14;
+    private javax.swing.JMenuItem jMenuItem15;
     private javax.swing.JMenuItem jMenuItem16;
     private javax.swing.JMenuItem jMenuItem17;
     private javax.swing.JMenuItem jMenuItem2;

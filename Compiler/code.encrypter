@@ -5,6 +5,7 @@ port_A2 motor motor1!
 port_B6 button ButtonIN!
 port_B7 temperature temperatureSensor!
 port_B3 LCD starLCD!
+port_B4 LED led1!
 
 #Declaracion e iniacializacion de variables
 var int number1!
@@ -13,6 +14,7 @@ const string number3!
 var boolean bandera = false!
 bandera = true!
 var string cadena2!
+const string estado!
 
 
 var string holaMundo = 'HolaMundo'!
@@ -69,6 +71,7 @@ loop{
   if(number3 and number2){}
   if(number1 >= number2){}
   number2 = 20.0!
+  delay(number1)!
   call estado = led1.state()!
   ligther(led1,ButtonIN)!
   turn_off(led1,ButtonIN)!
