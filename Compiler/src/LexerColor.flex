@@ -20,7 +20,7 @@ FinDeLineaComentario = "#" {EntradaDeCaracter}* {TerminadorDeLinea}?
 CaracterNoValido = [$¬@%?¡¿"|""/""*"]
 GuionBajo = [_]
 Simbolo = [ .,=()<>#{}+-;:&]
-Simbolo2 = [,=()<>#{}+-:&_]
+Simbolo2 = [(#{}:&_]
 Punto = [.]
 Coma = [,]
 Comilla = [']
