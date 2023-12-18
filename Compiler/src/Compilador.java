@@ -1901,123 +1901,221 @@ public class Compilador extends javax.swing.JFrame {
 "__CONFIG _CONFIG1, _FOSC_INTRC_NOCLKOUT & _WDTE_OFF & _PWRTE_OFF & _LVP_OFF\n" +
 "\n" +
 "CBLOCK  0x20\n" +
-"highfactor,\n" +
-"highfactor1    \n" +
+"highfactor1\n" +
+"timer0_counter1\n" +
+"highfactor2\n" +
+"timer0_counter2\n" +
+"highfactor3 ; Nueva variable para Servo3\n" +
+"timer0_counter3 ; Nueva variable para Servo3\n" +
 "ENDC\n" +
 "\n" +
-"TMR0_LOAD equ   .164	; Approximate value for 100 us of timing.\n" +
+"TMR0_LOAD equ   .164 ; Valor aproximado para 100 us de temporización.\n" +
 "\n" +
-"#define OUTPUT  PORTB,0	; Rename RB0 as OUTPUT\n" +
-"#define	OUTPUT1	PORTB,1\n" +
-"#define	OUTPUT2	PORTB,2\n" +
+"#define OUTPUT1 PORTB,0 ; Renombrar RB0 como OUTPUT1 (Servo Motor 1)\n" +
+"#define OUTPUT2 PORTB,1 ; Renombrar RB1 como OUTPUT2 (Servo Motor 2)\n" +
+"#define OUTPUT3 PORTB,2 ; Nueva definición para OUTPUT3 (Servo Motor 3)\n" +
 " \n" +
-"#define INPUT1  PORTA,0	; Rename RA0 as INPUT1\n" +
-"#define INPUT2  PORTA,1	; Rename RA1 as INPUT2\n" +
+"#define LED PORTC,2 ; Foco Afuera\n" +
+"#define LED_MiniSplit PORTC, 3 ; MiniSplit\n" +
+"#define LED_Sala PORTC, 4 ; MiniSplit\n" +
 "\n" +
-"org	    0x00  \n" +
+"#define INPUT1  PORTA,0 ; Renombrar RA0 como INPUT1\n" +
+"#define INPUT2  PORTA,1 ; Renombrar RA1 como INPUT2\n" +
+"#define INPUT3  PORTA,2 ; Renombrar RA2 como INPUT3\n" +
+"#define INPUT4  PORTA,3 ; Renombrar RA3 como INPUT4\n" +
+"\n" +
+"org     0x00  \n" +
 "goto    Main\n" +
-"org	    0x04\n" +
-"goto    TIMER0_Interrupt	; Interruption vector.\n" +
+"org     0x04\n" +
+"goto    TIMER0_Interrupt ; Vector de interrupción.\n" +
 "\n" +
 "Main\n" +
-"    bsf     STATUS,6    ; Seleccionar el banco 3.\n" +
-"    bsf     STATUS,5\n" +
-"    clrf    ANSEL   ; PORTA y PORTB funcionan digitalmente,\n" +
-"    clrf    ANSELH\n" +
-"    movlw   0xD8\n" +
-"    movwf   OPTION_REG ; El reloj de TIMER0 es igual a Fosc/4, prescaler para WDT.\n" +
-"    \n" +
-"    ; Configuración para el puerto B\n" +
-"    bcf     STATUS,6    ; Seleccionar el banco 1.\n" +
-"    movlw   0x61\n" +
-"    movwf   OSCCON   ; Oscilador interno predeterminado a 4MHz.\n" +
-"    bcf     TRISB,0 ; RB0 funciona como salida.\n" +
-"    bcf	    TRISB,1\n" +
-"    bcf	    TRISB,2\n" +
-"    ; Configuración para el puerto C\n" +
-"    bcf     TRISC,2 ; RC2 funciona como salida. para encender el LED\n" +
-"\n" +
-"    bcf     STATUS,5   ; Seleccionar el banco 0.\n" +
-"    clrf    PORTB\n" +
-"    clrf    PORTC  ; Asegurar que RC0 esté apagado al inicio.\n" +
-"    movlw   TMR0_LOAD\n" +
-"    movwf   TMR0    ; TIMER0 se iguala a 164.\n" +
-"    movlw   0xA0\n" +
-"    movwf   INTCON  ; GIE = 1 e interrupción de desbordamiento de Timer0.\n" +
+"    bsf STATUS,6 ; Seleccionar banco 3.\n" +
+"    bsf STATUS,5\n" +
+"    clrf ANSEL ; PORTA y PORTB funcionan digitalmente,\n" +
+"    clrf ANSELH\n" +
+"    movlw 0xD8\n" +
+"    movwf OPTION_REG ; La frecuencia del TIMER0 es igual a Fosc/4, prescaler para WDT.\n" +
+"    bcf STATUS,6 ; Seleccionar banco 1.\n" +
+"    movlw 0x61\n" +
+"    movwf OSCCON ; Oscilador interno predeterminado de 4MHz\n" +
+"    bcf TRISB,0 ; RB0 funciona como salida para el Servo Motor 1.\n" +
+"    bcf TRISB,1 ; RB1 funciona como salida para el Servo Motor 2.\n" +
+"    bcf TRISB,2 ; RB2 funciona como salida para el Servo Motor 3.\n" +
+"    bcf	TRISC,2\n" +
+"    bcf TRISC,3\n" +
+"    bcf	TRISC,4\n" +
+"    bcf STATUS,5 ; seleccionar el banco 0.\n" +
+"    clrf PORTB\n" +
+"    clrf PORTC\n" +
+"    movlw TMR0_LOAD\n" +
+"    movwf TMR0 ; TIMER0 es igual a 164.\n" +
+"    movlw 0xA0\n" +
+"    movwf INTCON ; GIE = 1 e interrupción de desbordamiento del Timer0\n" +
+"    ;bsf LED ; Enciende el LED\n" +
 "Loop\n" +
+"    btfss   INPUT1 ; Abrir puertas y ventanas\n" +
+"    call    Delay_5s\n" +
+"    bsf	    LED ; Encender LED Afuera y tarda 5 segundos\n" +
+"    call    Delay_1s\n" +
+"    call    Delay_1s\n" +
+"    call    Delay_1s\n" +
+"    bsf	    LED_MiniSplit ; Encender Minisplit y tarda 5 segundos\n" +
+"    call    Delay_1s\n" +
+"    bsf	    LED_Sala ; Encender LED Sala y tarda 5 segundos\n" +
+"    call    Condition1 \n" +
 "    \n" +
-"    btfss   INPUT1	;RA0 == 0? Servomotor at 0°.\n" +
-"    call    Condition1\n" +
-"    btfss   INPUT2	;RA1 == 0? Servomotor at 180°.\n" +
+"    btfss   INPUT2 ; Cerrar puertas y ventanas\n" +
+"    bcf	    LED ; Apagar led de afuera\n" +
+"    bsf	    LED_MiniSplit\n" +
+"    bsf	    LED_Sala\n" +
 "    call    Condition2\n" +
-"    goto    Loop\n" +
-"\n" +
-"Condition1		;Load 5 to highfactor.\n" +
-"    call    Delay_50ms\n" +
-"    btfsc   INPUT1\n" +
-"    return  \n" +
-"Stay1	\n" +
-"    btfss   INPUT1\n" +
-"    goto    Stay1\n" +
-"    bsf     PORTC, 2   ; Enciende el LED\n" +
-"    movlw   .11\n" +
-"    movwf   highfactor\n" +
+"    \n" +
+"    btfss   INPUT3\n" +
+"    call    Condition3\n" +
+"    \n" +
+"    goto Loop\n" +
+"   \n" +
+"Condition1 ; Cargar highfactor1 y timer0_counter1 para el Servo Motor 1.\n" +
+"    call Delay_50ms\n" +
+"    btfsc INPUT1\n" +
+"    return\n" +
+"Stay1\n" +
+"    btfss INPUT1\n" +
+"    goto Stay1\n" +
+"    call  Delay_50ms  ; Contara 50  milisegundos para abrir la puerta\n" +
+"    movlw .5           ; Puerta\n" +
+"    movwf highfactor1\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter1 ; Establecer timer0_counter1 al valor máximo\n" +
+"    call  Delay_50ms\n" +
+"    call  Delay_50ms\n" +
+"    movlw .11             ;Ventana derecha\n" +
+"    movwf highfactor2\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter2 ; Establecer timer0_counter2 al valor máximo\n" +
+"    movlw .11            ; Ventana izquierda\n" +
+"    movwf highfactor3 ; Establecer highfactor3 para Servo3\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter3 ; Establecer timer0_counter3 al valor máximo\n" +
 "    return\n" +
 "\n" +
-"Condition2		;Load 22 to highfactor.\n" +
-"    call    Delay_50ms\n" +
-"    btfsc   INPUT2\n" +
+"Condition2 ; Cargar highfactor1 y timer0_counter1 para el Servo Motor 1.\n" +
+"    call Delay_50ms\n" +
+"    btfsc INPUT2\n" +
 "    return\n" +
 "Stay2\n" +
-"    btfss   INPUT2\n" +
-"    goto    Stay2\n" +
-"    bcf     PORTC, 2   ; Apaga el led colocandolo en 0\n" +
-"    movlw   .22\n" +
-"    movwf   highfactor\n" +
+"    btfss INPUT2\n" +
+"    goto Stay2\n" +
+"    movlw .22 ; Puerta\n" +
+"    movwf highfactor1\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter1 ; Establecer timer0_counter1 al valor máximo\n" +
+"    call  Delay_50ms\n" +
+"    call  Delay_50ms\n" +
+"    movlw .5 ; Ventana derecha\n" +
+"    movwf highfactor2\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter2 ; Establecer timer0_counter2 al valor máximo\n" +
+"    movlw .22 ; Ventana izquierda\n" +
+"    movwf highfactor3 ; Establecer highfactor3 para Servo3\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter3 ; Establecer timer0_counter3 al valor máximo\n" +
+"    return\n" +
+"Condition3 ; Load highfactor2 and timer0_counter2 for Servo Motor 2.\n" +
+"    call Delay_50ms\n" +
+"    btfsc INPUT3\n" +
+"    return\n" +
+"Stay3\n" +
+"    btfss INPUT3\n" +
+"    goto Stay3\n" +
+"    movlw .22 ; Puerta\n" +
+"    movwf highfactor1\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter1 ; Establecer timer0_counter1 al valor máximo\n" +
 "    return\n" +
 "\n" +
-"CBLOCK\n" +
-"timer0_counter\n" +
-"ENDC\n" +
-"\n" +
-";///////////////////////////////////////////////////////////////////////\n" +
-"TIMER0_Interrupt	    \n" +
-"    movlw   TMR0_LOAD	    ; Load TIMER0 with the value of TMR0_LOAD\n" +
-"    movwf   TMR0	    \n" +
-"    decfsz  timer0_counter  ; Decrements by one unit, jump if it's zero\n" +
-"    goto    EndInterrupt    ; Go to EndInterrupt\n" +
-"    btfsc   OUTPUT	    ; Complements the value of the output.\n" +
-"    goto    HighS	    \n" +
-"    btfsc   OUTPUT1	    ; Complements the value of the output.\n" +
-"    goto    HighS1\n" +
-"LowS1			    ; set the output to zero.\n" +
-"    bsf	    OUTPUT1\n" +
-"    movf    highfactor1,W    ; Time the signal is high.\n" +
-"    movwf   timer0_counter\n" +
-"    goto    EndInterrupt\n" +
-"\n" +
-"HighS1	\n" +
-"    bcf	    OUTPUT1	    ; Set the output to one.\n" +
-"    movf    highfactor1,W    \n" +
-"    sublw   .200	    ; Time the signal is low.\n" +
-"    movwf   timer0_counter    \n" +
-"LowS			    ; set the output to zero.\n" +
-"    bsf	    OUTPUT\n" +
-"    movf    highfactor,W    ; Time the signal is high.\n" +
-"    movwf   timer0_counter\n" +
-"    goto    EndInterrupt\n" +
-"\n" +
-"HighS	\n" +
-"    bcf	    OUTPUT	    ; Set the output to one.\n" +
-"    movf    highfactor,W    \n" +
-"    sublw   .200	    ; Time the signal is low.\n" +
-"    movwf   timer0_counter\n" +
+"Condition4 ; Load highfactor2 and timer0_counter2 for Servo Motor 2.\n" +
+"    call Delay_50ms\n" +
+"    btfsc INPUT4\n" +
+"    return\n" +
+"Stay4\n" +
+"    btfss INPUT4\n" +
+"    goto Stay4\n" +
+"    movlw .5\n" +
+"    movwf highfactor2\n" +
+"    movlw 0xFF\n" +
+"    movwf timer0_counter2 ; Set timer0_counter2 to maximum value\n" +
+"    return\n" +
+"     \n" +
+"TIMER0_Interrupt\n" +
+"    movlw TMR0_LOAD ; Load TIMER0 with the value of TMR0_LOAD\n" +
+"    movwf TMR0\n" +
+"    ; Servo Motor 1\n" +
+"    decfsz timer0_counter1 ; Decrements by one unit, jump if it's zero\n" +
+"    goto Servo1 ; Go to Servo1\n" +
+"    btfsc OUTPUT1 ; Complements the value of OUTPUT1.\n" +
+"    goto HighS1\n" +
 "    \n" +
+"LowS1 ; Set OUTPUT1 to zero.\n" +
+"    bsf OUTPUT1\n" +
+"    movf highfactor1,W ; Time the signal is high.\n" +
+"    movwf timer0_counter1\n" +
+"    goto Servo1\n" +
+"\n" +
+"HighS1\n" +
+"    bcf OUTPUT1 ; Set OUTPUT1 to one.\n" +
+"    movf highfactor1,W\n" +
+"    sublw .200 ; Time the signal is low.\n" +
+"    movwf timer0_counter1\n" +
+"    goto Servo1\n" +
+"\n" +
+"Servo1\n" +
+"    ; Servo Motor 2\n" +
+"    decfsz timer0_counter2 ; Decrements by one unit, jump if it's zero\n" +
+"    goto Servo2 ; Go to Servo2\n" +
+"    btfsc OUTPUT2 ; Complements the value of OUTPUT2.\n" +
+"    goto HighS2\n" +
+"    \n" +
+"LowS2 ; Set OUTPUT2 to zero.\n" +
+"    bsf OUTPUT2\n" +
+"    movf highfactor2,W ; Time the signal is high.\n" +
+"    movwf timer0_counter2\n" +
+"    goto Servo2\n" +
+"\n" +
+"HighS2\n" +
+"    bcf OUTPUT2 ; Set OUTPUT2 to one.\n" +
+"    movf highfactor2,W\n" +
+"    sublw .200 ; Time the signal is low.\n" +
+"    movwf timer0_counter2\n" +
+"    goto Servo2\n" +
+"\n" +
+"Servo2\n" +
+"    ; Servo Motor 3\n" +
+"    decfsz timer0_counter3 ; Decrements by one unit, jump if it's zero\n" +
+"    goto EndInterrupt ; Go to EndInterrupt\n" +
+"    btfsc OUTPUT3 ; Complements the value of OUTPUT3.\n" +
+"    goto HighS3\n" +
+"    \n" +
+"LowS3 ; Set OUTPUT3 to zero.\n" +
+"    bsf OUTPUT3\n" +
+"    movf highfactor3,W ; Time the signal is high.\n" +
+"    movwf timer0_counter3\n" +
+"    goto EndInterrupt\n" +
+"\n" +
+"HighS3\n" +
+"    bcf OUTPUT3 ; Set OUTPUT3 to one.\n" +
+"    movf highfactor3,W\n" +
+"    sublw .200 ; Time the signal is low.\n" +
+"    movwf timer0_counter3\n" +
+"    goto EndInterrupt\n" +
+"\n" +
 "EndInterrupt\n" +
-"    bcf	    INTCON,2	    ; Clear interrupt bit of TIMER0.\n" +
+"    bcf INTCON,2 ; Clear interrupt bit of TIMER0.\n" +
 "    retfie\n" +
 "    INCLUDE <C:\\Users\\Alex\\Downloads\\DELAYS.inc>\n" +
-"END");
+"    END");
+        showMessageDialog(this,"Archivo .asm guardado en sus archivos");
     }
     /**
      * @param args the command line arguments
